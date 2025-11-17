@@ -1,7 +1,7 @@
 package entity;
 
 public class Source {
-    private String name;
+    private final String name;
     private Category category;
 
     public Source(String name, Category category) {
@@ -15,5 +15,8 @@ public class Source {
 
     public Category getCategory() {
         return category;
+    }
+
+    public String getName() {return name;
     }
 }
