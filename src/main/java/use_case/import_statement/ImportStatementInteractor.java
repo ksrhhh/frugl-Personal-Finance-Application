@@ -18,8 +18,6 @@ public class ImportStatementInteractor implements ImportStatementInputBoundary {
 
     @Override
     public void execute(ImportStatementInputData inputData) {
-        if (inputData.equals("success")) {
-            presenter.prepareSuccessView(new ImportStatementOutputData(YearMonth.of(2025, 11)));
-        }
+
     }
 }
