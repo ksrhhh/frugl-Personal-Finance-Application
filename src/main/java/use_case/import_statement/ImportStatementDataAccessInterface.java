@@ -11,11 +11,9 @@ import java.util.List;
 
 public interface ImportStatementDataAccessInterface {
 
-    void saveTransaction(Transaction transaction);
+    void addTransaction(Transaction transaction);
 
     boolean sourceExists(String sourceName);
-
-    void saveSource(Source source);
 
     //If the newly-imported statement is the latest one, update the record.
     void updateLatestStatementMonth(YearMonth month);
