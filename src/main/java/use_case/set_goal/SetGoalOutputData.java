@@ -1,14 +1,18 @@
 package use_case.set_goal;
 
+import java.time.LocalDateTime;
+
 import entity.Goal;
 
-import java.time.LocalDateTime;
 
 public class SetGoalOutputData {
 
     private final Goal goal;
+
     private final boolean success;
+
     private final String message;
+
     private final LocalDateTime timestamp;
 
 

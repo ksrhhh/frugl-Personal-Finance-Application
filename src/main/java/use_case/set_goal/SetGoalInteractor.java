@@ -5,6 +5,7 @@ import entity.Goal;
 public class SetGoalInteractor implements SetGoalInputBoundary {
 
     private final SetGoalDataAccessInterface dataAccess;
+
     private final SetGoalOutputBoundary presenter;
 
     public SetGoalInteractor(SetGoalDataAccessInterface dataAccess, SetGoalOutputBoundary presenter) {

@@ -1,6 +1,5 @@
 package interface_adapter.set_goal;
 
-import interface_adapter.set_goal.SetGoalViewModel;
 import use_case.set_goal.SetGoalOutputBoundary;
 import use_case.set_goal.SetGoalOutputData;
 
