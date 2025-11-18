@@ -1,4 +1,4 @@
-package use_case.LoadDashboard;
+package use_case.load_dashboard;
 
 public enum TimeRange {
     ONE_MONTH("Last 30 Days"),
