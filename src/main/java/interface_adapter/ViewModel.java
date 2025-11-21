@@ -60,4 +60,9 @@ public class ViewModel<T> {
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.support.addPropertyChangeListener(listener);
     }
+
+    public void firePropertyChange(String propertyName, Object newValue) {
+        this.support.firePropertyChange(propertyName, null, newValue);
+    }
+
 }
