@@ -15,14 +15,13 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
     private final String viewName = "import statement";
     private final ImportStatementViewModel importStatementViewModel;
 
-    private final ImportStatementController controller;
+    private ImportStatementController importStatementController = null;
 
     private final JTextField filePathField;
     private final JButton importButton;
     private final JButton backButton;
 
-    public ImportStatementView(ImportStatementController controller, ImportStatementViewModel viewModel) {
-        this.controller = controller;
+    public ImportStatementView(ImportStatementViewModel viewModel) {
         this.importStatementViewModel = viewModel;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -63,10 +62,10 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == importButton) {
             String filePath = filePathField.getText().trim();
-            controller.execute(filePath);
+            importStatementController.execute(filePath);
         }
         else if (e.getSource() == backButton) {
-            controller.backToDashboard();
+            importStatementController.backToDashboard();
         }
     }
 
@@ -75,6 +74,10 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
         if ("filePath".equals(evt.getPropertyName())) {
             filePathField.setText((String) evt.getNewValue());
         }
+    }
+
+    public void setImportStatementController(ImportStatementController controller) {
+        importStatementController = controller;
     }
 
 }
