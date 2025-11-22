@@ -32,7 +32,8 @@ public class ImportStatementPresenter implements ImportStatementOutputBoundary {
 
         String message = "Importing Successful for " + month.format(DateTimeFormatter.ofPattern("MMMM yyyy"));
         viewManagerModel.showPopup(message);
-        importViewModel.setFilePath("");
+        importViewModel.setState("");
+        importViewModel.firePropertyChange("filePath");
         dashboardViewModel.fireStatementAdded(month);
         transactionsViewModel.fireStatementAdded(month);
         goalsViewModel.fireStatementAdded(month);
@@ -42,6 +43,7 @@ public class ImportStatementPresenter implements ImportStatementOutputBoundary {
     public void prepareFailView(String errorMessage) {
         String message = "Importing Unsuccessful: " + errorMessage;
         viewManagerModel.showPopup(message);
-        importViewModel.setFilePath("");
+        importViewModel.setState("");
+        importViewModel.firePropertyChange("filePath");
     }
 }
