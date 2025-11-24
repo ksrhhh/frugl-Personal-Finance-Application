@@ -17,8 +17,9 @@ import entity.Category;
 import entity.Transaction;
 import use_case.autosave.AutosaveDataAccessInterface;
 import use_case.import_statement.ImportStatementDataAccessInterface;
+import use_case.load_dashboard.LoadDashboardDataAccessInterface;
 
-public class TransactionDataAccessObject implements AutosaveDataAccessInterface, ImportStatementDataAccessInterface {
+public class TransactionDataAccessObject implements AutosaveDataAccessInterface, LoadDashboardDataAccessInterface, ImportStatementDataAccessInterface {
     private final File jsonFile;
 
     private final Gson gson;
