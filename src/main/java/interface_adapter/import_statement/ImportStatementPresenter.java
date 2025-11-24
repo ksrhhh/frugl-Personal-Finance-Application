@@ -1,8 +1,6 @@
 package interface_adapter.import_statement;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.dashboard.DashboardViewModel;
-import interface_adapter.set_goal.SetGoalViewModel;
 import use_case.import_statement.ImportStatementOutputBoundary;
 import use_case.import_statement.ImportStatementOutputData;
 
