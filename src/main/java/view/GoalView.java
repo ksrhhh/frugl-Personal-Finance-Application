@@ -199,9 +199,9 @@ public class GoalView extends JPanel implements ActionListener, PropertyChangeLi
                 JOptionPane.showMessageDialog(this, viewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             if (viewModel.getSuccessMessage() != null) {
-                JOptionPane.showMessageDialog(this, viewModel.getSuccessMessage(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, viewModel.getSuccessMessage(),
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
 }
-
