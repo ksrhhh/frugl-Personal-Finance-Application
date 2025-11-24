@@ -51,7 +51,7 @@ public class SetGoalInteractor implements SetGoalInputBoundary {
 
                 // generate goal trees based on goals with deterministic coordinates
 
-                int seed = g.getMonth().hashCode();
+                int seed = 123;
                 Random rng = new Random(seed);
 
                 int x = rng.nextInt(700);
