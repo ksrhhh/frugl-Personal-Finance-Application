@@ -1,5 +1,9 @@
 package entity;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.time.LocalDate;
+
 public class Transaction {
     @SerializedName("date")
     private final LocalDate date;
