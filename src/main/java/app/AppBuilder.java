@@ -135,7 +135,7 @@ public class AppBuilder {
     }
 
     public JFrame build() {
-        JFrame application = new JFrame("frugl.");
+        JFrame application = new JFrame("frugl");
 
         application.add(cardPanel);
         viewManagerModel.setState(goalView.viewName);
