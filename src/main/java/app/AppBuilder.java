@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 
 import javax.swing.*;
 
+import charts.PieChartRenderer;
+import charts.ProcessedPieChartData;
 import data_access.GoalDataAccessObject;
 import data_access.TransactionDataAccessObject;
 import entity.Goal;
@@ -11,6 +13,8 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.autosave.AutosaveController;
 import interface_adapter.autosave.AutosavePresenter;
 import interface_adapter.autosave.AutosaveViewModel;
+import interface_adapter.dashboard.DashboardPresenter;
+import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.import_statement.ImportStatementController;
 import interface_adapter.import_statement.ImportStatementPresenter;
 import interface_adapter.import_statement.ImportStatementViewModel;
@@ -23,13 +27,13 @@ import use_case.autosave.AutosaveOutputBoundary;
 import use_case.import_statement.ImportStatementInputBoundary;
 import use_case.import_statement.ImportStatementInteractor;
 import use_case.import_statement.ImportStatementOutputBoundary;
+import use_case.load_dashboard.LoadDashboardInputBoundary;
+import use_case.load_dashboard.LoadDashboardInteractor;
+import use_case.load_dashboard.LoadDashboardOutputBoundary;
 import use_case.set_goal.SetGoalInputBoundary;
 import use_case.set_goal.SetGoalInteractor;
 import use_case.set_goal.SetGoalOutputBoundary;
-import view.AutosaveView;
-import view.GoalView;
-import view.ImportStatementView;
-import view.ViewManager;
+import view.*;
 
 public class AppBuilder {
 
@@ -49,6 +53,9 @@ public class AppBuilder {
 
     private GoalView goalView;
     private SetGoalViewModel setGoalViewModel;
+
+    private DashboardView dashboardView;
+    private DashboardViewModel dashboardViewModel;
 
 
     public AppBuilder() {
@@ -94,7 +101,7 @@ public class AppBuilder {
         setGoalViewModel = new SetGoalViewModel();
         goalView = new GoalView(setGoalViewModel);
 
-        cardPanel.add(goalView, goalView.viewName);
+        cardPanel.add(goalView, setGoalViewModel.getViewName());
         return this;
     }
 
@@ -105,6 +112,19 @@ public class AppBuilder {
         SetGoalController setGoalController = new SetGoalController(setGoalInputBoundary);
         goalView.setGoalController(setGoalController);
 
+        return this;
+    }
+
+    public AppBuilder addDashboardView() {
+        dashboardViewModel = new DashboardViewModel();
+        dashboardView = new DashboardView(dashboardViewModel);
+
+        cardPanel.add(dashboardView, dashboardViewModel.getViewName());
+        return this;
+    }
+
+    public AppBuilder addDashboardUseCase() {
+        //TODO: add Dashboard Use Case to AppBuilder
         return this;
     }
 
