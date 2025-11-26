@@ -1,6 +1,4 @@
 package entity;
-import com.google.gson.annotations.SerializedName;
-import java.time.LocalDate;
 
 import com.google.gson.annotations.SerializedName;
 
