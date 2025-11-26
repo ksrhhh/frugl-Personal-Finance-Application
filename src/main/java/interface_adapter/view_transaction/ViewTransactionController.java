@@ -18,7 +18,6 @@ public class ViewTransactionController {
 
     public void execute(String monthString)
     {
-        System.out.println("1. Controller executing for: " + monthString);
         YearMonth yearMonth;
             yearMonth = YearMonth.parse(monthString); // Expects "YYYY-MM"
 

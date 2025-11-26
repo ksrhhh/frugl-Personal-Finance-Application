@@ -35,7 +35,6 @@ public class ViewTransactionPresenter implements ViewTransactionOutputBoundary {
 
     @Override
     public void prepareFailView(String error) {
-        System.out.println("3. Presenter updating state with error: " + error);
         final ViewTransactionState viewTransactionState = viewTransactionViewModel.getState();
         viewTransactionState.setDataError(error);
 
@@ -44,7 +43,6 @@ public class ViewTransactionPresenter implements ViewTransactionOutputBoundary {
         this.viewTransactionViewModel.setState(viewTransactionState);
 
         viewTransactionViewModel.firePropertyChange();
-        System.out.println("3a. Presenter fired property change.");
     }
 
 

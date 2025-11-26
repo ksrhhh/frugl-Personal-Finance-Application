@@ -44,7 +44,6 @@ public class ViewTransactionInteractor implements ViewTransactionInputBoundary {
 
 
     public void execute(ViewTransactionInputData transactionInputData) {
-        System.out.println("2. Interactor executing.");
 
         LocalDate start = transactionInputData.getStartDate();
         LocalDate end = transactionInputData.getEndDate();
@@ -55,12 +54,10 @@ public class ViewTransactionInteractor implements ViewTransactionInputBoundary {
 
 
         if (!proccessed_transactions.isEmpty()){
-            System.out.println("2b. Interactor calling success view.");
             final ViewTransactionOutputData viewTransactionOutputData= new ViewTransactionOutputData(yearMonth.toString(),proccessed_transactions );
             viewTransactionPresenter.prepareSuccessView(  viewTransactionOutputData);
         }
         else{
-            System.out.println("2a. Interactor calling fail view.");
             viewTransactionPresenter.prepareFailView( "No data available.");
 
 

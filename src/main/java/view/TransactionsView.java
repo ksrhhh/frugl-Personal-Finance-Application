@@ -53,7 +53,6 @@ public class TransactionsView extends JPanel implements ActionListener, Property
         populateDropDown();
 
         buildContainer();
-       // ClickedMonth(); TODo: set inital Nove-2025
 
     }
 
@@ -112,12 +111,6 @@ public class TransactionsView extends JPanel implements ActionListener, Property
     }
 
 
-//    private void loadMonthlyTransaction(){
-//        List<HashMap<String, Object>> transaction_test_data = new ArrayList<>();
-//        // get the drop_down
-//    }
-
-
     private void rebuildTiles(List<HashMap<String, Object>> monthlyTransactions) { //monthly transactions
 
         transactionTilesBlock.removeAll();
@@ -146,94 +139,11 @@ public class TransactionsView extends JPanel implements ActionListener, Property
                 row.add(new JLabel(String.valueOf(t.get("source"))));
                 row.add(new JLabel(String.valueOf(t.get("category"))));
                 row.add(new JLabel(String.format("%.2f", (Double) t.get("amount"))));
-//
-//                JButton editBtn = new JButton("Edit");
-//                row.add(editBtn);
-//                row.add(editBtn);
 
                 row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
                 transactionTilesBlock.add(row);
             }
         }
-
-
-
-
-
-
-        /// ////////////////////////
-
-        //set the number of the buttons be the name
-//        editBtn.setName(String.valueOf(i));
-
-
-
-
-//        editBtn.addActionListener(e -> {
-//
-//
-//            // create a daiglof as a pop-up
-//            JDialog dialog = new JDialog(jFrame, "Edit category", true); // modal
-//            dialog.setSize(400, 300);
-//            dialog.setLayout(new BorderLayout());
-//
-//            //edit the button
-//            JButton btn = (JButton) e.getSource();
-//            int tile_num = Integer.parseInt(btn.getName());
-//
-//            //debuggin try
-//            System.out.println(tile_num);
-//
-//            //Creatte a panel to put inside the drop_down
-//            JPanel popUpPanel = new JPanel();
-//            popUpPanel.setLayout(new GridLayout(0, 2));
-//
-//            //create a drop_down
-//            String[] categories = {"Income", "Rent_Utilities", "Food", "Transportation", "Shopping", "Other"};
-//            JComboBox<String> categoryCombo = new JComboBox<>(categories);
-//            categoryCombo.setSelectedItem(monthlyTransactions.get(tile_num).get("category"));
-//            dialog.add(new JLabel("Category:"));
-//            dialog.add(categoryCombo);
-//            monthlyTransactions.get(tile_num).put("category", categoryCombo.getSelectedItem());
-//
-//            //add the drop_down to the popUpPanel
-//            popUpPanel.add(new JLabel("Category:"));
-//            popUpPanel.add(categoryCombo);
-//
-//
-//            //create save and cancel buttons
-//            JPanel buttonPanel = new JPanel();
-//            JButton saveButton = new JButton("Save");
-//            JButton cancelButton = new JButton("Cancel");
-//
-//            saveButton.addActionListener(save_cat -> {
-//
-//                monthlyTransactions.get(tile_num).put("category", categoryCombo.getSelectedItem()); ///output data
-//                System.out.println(categoryCombo.getSelectedItem());
-//                JOptionPane.showMessageDialog(dialog, " Category updated!");
-//                dialog.dispose();
-//
-//                rebuildTiles(tileBlock, jFrame, monthlyTransactions); //convert to use case
-//            });
-//
-//
-//            //when you cancel
-//            cancelButton.addActionListener(cancelEvent -> {
-//                dialog.dispose();
-//            });
-//
-//            buttonPanel.add(saveButton);
-//            buttonPanel.add(cancelButton);
-//            dialog.add(popUpPanel, BorderLayout.CENTER);
-//            dialog.add(buttonPanel, BorderLayout.SOUTH);
-//            dialog.setVisible(true); //makes sure to turn on dialog
-//
-//
-//        });
-//
-//        tile.add(editBtn);
-//        tile.add(new JLabel("   "));
-//        tileBlock.add(tile);
 
 
         transactionTilesBlock.revalidate();
@@ -251,8 +161,6 @@ public class TransactionsView extends JPanel implements ActionListener, Property
         String yearMonthString = selectedYear + "-" + monthNumber;
 
         viewTransactionController.execute(yearMonthString);
-//        ArrayList<HashMap<String, Object>> monthlyTransaction =returnMonthTransactions();
-//        rebuildTiles(transactionTilesBlock, jFrame, monthlyTransaction);
 
     }
 
