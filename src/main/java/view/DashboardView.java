@@ -29,7 +29,6 @@ public class DashboardView extends JPanel{
         this.viewModel = viewModel;
 
         setupUI();
-        loadInitialData();
     }
 
     private void setupUI() {
@@ -96,7 +95,7 @@ public class DashboardView extends JPanel{
         return spinner;
     }
 
-    private void loadInitialData() {
+    public void loadInitialData() {
         onRefreshClicked();
     }
 
@@ -109,7 +108,7 @@ public class DashboardView extends JPanel{
         LocalDate startDate = convertToLocalDate(legacyStartDate);
         LocalDate endDate = convertToLocalDate(legacyEndDate);
 
-        LocalDate currentDate = LocalDate.ofEpochDay(System.currentTimeMillis());
+        LocalDate currentDate = LocalDate.now();
 
         controller.loadDashboard(currentDate, selectedTimeRange, startDate, endDate);
         updateChartDisplay();
@@ -132,18 +131,14 @@ public class DashboardView extends JPanel{
             timeChartLabel.setText("No Data");
             timeChartLabel.setIcon(null);
         } else {
-            if (chartImages.size() > 0 ){
-                timeChartLabel.setText("");
-                timeChartLabel.setIcon(new ImageIcon(chartImages.get(0)));
-            }
-            if (chartImages.size() > 1){
-                pieChartLabel.setText("");
-                pieChartLabel.setIcon(new ImageIcon(chartImages.get(1)));
+            timeChartLabel.setText("");
+            timeChartLabel.setIcon(new ImageIcon(chartImages.get(0)));
+            pieChartLabel.setText("");
+            pieChartLabel.setIcon(new ImageIcon(chartImages.get(1)));
             }
         }
-    }
 
-    public void setDashboardController(DashboardController controller){
+    public void setDashboardController(DashboardController controller) {
         this.controller = controller;
     }
 }
