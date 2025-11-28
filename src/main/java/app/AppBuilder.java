@@ -21,6 +21,7 @@ import interface_adapter.import_statement.ImportStatementViewModel;
 import interface_adapter.set_goal.SetGoalController;
 import interface_adapter.set_goal.SetGoalPresenter;
 import interface_adapter.set_goal.SetGoalViewModel;
+import interface_adapter.view_transaction.ViewTransactionViewModel;
 import use_case.autosave.AutosaveInputBoundary;
 import use_case.autosave.AutosaveInteractor;
 import use_case.autosave.AutosaveOutputBoundary;
@@ -56,6 +57,9 @@ public class AppBuilder {
 
     private DashboardView dashboardView;
     private DashboardViewModel dashboardViewModel;
+
+    private TransactionsView viewTransactionView;
+    private ViewTransactionViewModel viewTransactionViewModel;
 
 
     public AppBuilder() {
@@ -127,6 +131,26 @@ public class AppBuilder {
         //TODO: add Dashboard Use Case to AppBuilder
         return this;
     }
+
+
+    public AppBuilder addSetTransactionView() {
+        viewTransactionViewModel = new ViewTransactionViewModel();
+        viewTransactionView = new TransactionsView(ViewTransactionViewModel);
+
+        cardPanel.add(goalView, setGoalViewModel.getViewName());
+        return this;
+    }
+
+    public AppBuilder addGoalUseCase() {
+        final SetGoalOutputBoundary setGoalOutputBoundary = new SetGoalPresenter(setGoalViewModel);
+        final SetGoalInputBoundary setGoalInputBoundary = new SetGoalInteractor(goalDataAccessObject,
+                transactionDataAccessObject, setGoalOutputBoundary);
+        SetGoalController setGoalController = new SetGoalController(setGoalInputBoundary);
+        goalView.setGoalController(setGoalController);
+
+        return this;
+    }
+
 
     public JFrame build() {
         JFrame application = new JFrame("Frugl");

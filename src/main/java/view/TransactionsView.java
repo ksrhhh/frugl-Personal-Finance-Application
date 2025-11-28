@@ -22,7 +22,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.*;
 
-public class TransactionsView extends JPanel implements ActionListener, PropertyChangeListener {
+    public class TransactionsView extends JPanel implements ActionListener, PropertyChangeListener {
 
     //initialize all the compoents in CA
     private final String viewName = "view transaction";
@@ -31,8 +31,6 @@ public class TransactionsView extends JPanel implements ActionListener, Property
     private ViewTransactionController viewTransactionController;
 
     //master Frame made up of all JPanel
-    private final JFrame parentFrame;
-
     //componets for my view
     private final JPanel transactionTilesBlock = new JPanel();
     private JComboBox<String> dropdownMonth;
@@ -44,9 +42,8 @@ public class TransactionsView extends JPanel implements ActionListener, Property
     private final String[] dropdownYearList = {"2025", "2024", "2023"};
 
 
-    public TransactionsView (ViewTransactionViewModel viewTransactionViewModel, JFrame parentFrame) {
+    public TransactionsView (ViewTransactionViewModel viewTransactionViewModel) {
         this.viewTransactionViewModel= viewTransactionViewModel;
-        this.parentFrame = parentFrame;
         this.viewTransactionViewModel.addPropertyChangeListener(this);
         this.setLayout(new BorderLayout());
 
