@@ -21,7 +21,9 @@ import interface_adapter.import_statement.ImportStatementViewModel;
 import interface_adapter.set_goal.SetGoalController;
 import interface_adapter.set_goal.SetGoalPresenter;
 import interface_adapter.set_goal.SetGoalViewModel;
+import interface_adapter.view_transaction.ViewTransactionController;
 import interface_adapter.view_transaction.ViewTransactionPresenter;
+import interface_adapter.view_transaction.ViewTransactionState;
 import interface_adapter.view_transaction.ViewTransactionViewModel;
 import use_case.autosave.AutosaveInputBoundary;
 import use_case.autosave.AutosaveInteractor;
@@ -147,12 +149,12 @@ public class AppBuilder {
 
 
         final ViewTransactionOutputBoundary viewTransactionOutputBoundary = new ViewTransactionPresenter(viewManagerModel, viewTransactionViewModel);
-        ViewTransactionInteractor interactor = new ViewTransactionInteractor(transactionDataAccessObject, viewTransactionOutputBoundary);
+        final ViewTransactionInputBoundary viewTransactionInputBoundary = new ViewTransactionInteractor(transactionDataAccessObject, viewTransactionOutputBoundary);
+        ViewTransactionController viewTransactionController  = new ViewTransactionController(viewTransactionInputBoundary);
+        viewTransactionView.setViewTransactionController(viewTransactionController);
 
-        final ViewTransactionInputBoundary viewTransactionInputBoundary = new ViewTransactionInteractor( ViewTransactionDataAccessInterface);
-        SetGoalController setGoalController = new SetGoalController(setGoalInputBoundary);
-        goalView.setGoalController(setGoalController);
-
+        //load initial value
+        viewTransactionController.execute("2025-11");
         return this;
     }
 

@@ -17,6 +17,8 @@ public class Main {
                 .addGoalUseCase()
                 .addDashboardView()
                 .addDashboardUseCase()
+                .addTransactionsView()
+                .TransactionViewUseCase()
                 .build();
 
         application.pack();
