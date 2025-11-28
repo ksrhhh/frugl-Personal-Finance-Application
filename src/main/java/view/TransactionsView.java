@@ -126,7 +126,6 @@ public class TransactionsView extends JPanel implements ActionListener, Property
             header.add(new JLabel("Source"));
             header.add(new JLabel("Category"));
             header.add(new JLabel("Amount"));
-            header.add(new JLabel("Action"));
             header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
             transactionTilesBlock.add(header);
 
@@ -138,8 +137,7 @@ public class TransactionsView extends JPanel implements ActionListener, Property
                 row.add(new JLabel(String.valueOf(t.get("date"))));
                 row.add(new JLabel(String.valueOf(t.get("source"))));
                 row.add(new JLabel(String.valueOf(t.get("category"))));
-                row.add(new JLabel(String.format("%.2f", (Double) t.get("amount"))));
-
+                row.add(new JLabel((String) t.get("amount")));
                 row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
                 transactionTilesBlock.add(row);
             }
@@ -177,7 +175,9 @@ public class TransactionsView extends JPanel implements ActionListener, Property
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
             ViewTransactionState state = (ViewTransactionState) evt.getNewValue();
-            rebuildTiles(state.getMonthlyTransactions());
+            if (state.getMonthlyTransactions() != null) {
+                rebuildTiles(state.getMonthlyTransactions());
+            }
         }}
 
     public String getViewName() {

@@ -8,8 +8,7 @@ public class ViewTransactionOutputData {
     /// Convert list into string
 
     private final String yearMonthStr;
-    private List<HashMap<String, Object>> monthlyTransactions;
-
+    private final List<HashMap<String, Object>> monthlyTransactions;
     public ViewTransactionOutputData(String yearMonthStr, List<HashMap<String, Object>> monthlyTransactions) {
         this.yearMonthStr = yearMonthStr;
         this.monthlyTransactions = monthlyTransactions;

@@ -21,6 +21,7 @@ public class ViewTransactionPresenter implements ViewTransactionOutputBoundary {
     @Override
     public void prepareSuccessView(ViewTransactionOutputData result) {
         final ViewTransactionState viewTransactionState = viewTransactionViewModel.getState();
+        viewTransactionState.setMonthlyTransactions(result.getMonthTransactions());
         viewTransactionState.setMonth(result.getYearMonth());
         viewTransactionState.setDataError(null); // Clear any old error
 
