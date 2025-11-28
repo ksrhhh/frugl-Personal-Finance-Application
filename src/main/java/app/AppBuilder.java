@@ -117,7 +117,7 @@ public class AppBuilder {
 
     public AppBuilder addDashboardView() {
         dashboardViewModel = new DashboardViewModel();
-        dashboardView = new DashboardView(dashboardViewModel);
+        dashboardView = new DashboardView(dashboardViewModel, viewManagerModel);
 
         cardPanel.add(dashboardView, dashboardViewModel.getViewName());
         return this;

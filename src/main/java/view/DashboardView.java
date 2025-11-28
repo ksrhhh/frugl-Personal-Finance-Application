@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
@@ -16,6 +17,7 @@ import java.util.List;
 public class DashboardView extends JPanel{
     private DashboardController controller;
     private final DashboardViewModel viewModel;
+    private final ViewManagerModel viewManagerModel;
 
     //UI Components
     private JComboBox<TimeRange> timeRangeDropdown;
@@ -25,8 +27,9 @@ public class DashboardView extends JPanel{
     private JLabel pieChartLabel;
     private JLabel timeChartLabel;
 
-    public DashboardView(DashboardViewModel viewModel) {
+    public DashboardView(DashboardViewModel viewModel,  ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;
+        this.viewManagerModel = viewManagerModel;
 
         setupUI();
     }
@@ -83,6 +86,9 @@ public class DashboardView extends JPanel{
         JButton refreshButton = new JButton("Refresh Dashboard");
         refreshButton.addActionListener(e -> onRefreshClicked());
         bottomPanel.add(refreshButton);
+        JButton importStatementButton = new JButton("Import Statement");
+        importStatementButton.addActionListener(e -> onImportStatementClicked());
+        bottomPanel.add(importStatementButton);
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -97,6 +103,11 @@ public class DashboardView extends JPanel{
 
     public void loadInitialData() {
         onRefreshClicked();
+    }
+
+    private void onImportStatementClicked() {
+        viewManagerModel.setState("import statement");
+        viewManagerModel.firePropertyChange();
     }
 
     private void onRefreshClicked() {
