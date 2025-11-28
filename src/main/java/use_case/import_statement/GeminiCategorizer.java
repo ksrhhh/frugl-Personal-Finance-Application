@@ -32,14 +32,26 @@ public class GeminiCategorizer {
      */
     public Map<String, Category> categorizeSources(List<String> sources) throws Exception {
 
-        String prompt = buildPrompt(sources);
+        Map<String, Category> finalResult = new HashMap<>();
 
-        String jsonResponse = callGeminiApi(prompt);
+        int batchSize = 15;
+        for (int i = 0; i < sources.size(); i += batchSize) {
 
-        System.out.println(parseResponse(jsonResponse, sources));
+            // Create sub-list for this batch
+            List<String> batch = sources.subList(i, Math.min(i + batchSize, sources.size()));
 
-        return parseResponse(jsonResponse, sources);
+            // Build prompt just for this batch
+            String prompt = buildPrompt(batch);
 
+            // Make API call
+            String jsonResponse = callGeminiApi(prompt);
+
+            // Parse and merge result
+            Map<String, Category> batchResult = parseResponse(jsonResponse, batch);
+            finalResult.putAll(batchResult);
+        }
+
+        return finalResult;
     }
 
     /**
@@ -58,6 +70,12 @@ public class GeminiCategorizer {
      * Makes a HTTP POST request to Gemini using OkHttp.
      */
     private String callGeminiApi(String prompt) throws Exception {
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
         JsonObject requestJson = new JsonObject();
         JsonArray contentsArray = new JsonArray();
