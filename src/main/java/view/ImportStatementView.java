@@ -27,6 +27,8 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
     public ImportStatementView(ImportStatementViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.importStatementViewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
+        importStatementViewModel.addPropertyChangeListener(this);
+
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
