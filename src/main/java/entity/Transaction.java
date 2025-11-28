@@ -35,6 +35,4 @@ public class Transaction {
         return this.date;
     }
 
-    public Category getCategory(){return source.getCategory();}
-
 }

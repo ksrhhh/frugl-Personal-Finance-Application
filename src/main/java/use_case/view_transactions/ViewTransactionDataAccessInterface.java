@@ -1,9 +1,9 @@
 package use_case.view_transactions;
+import entity.Category;
+import entity.Source;
 import entity.Transaction;
 
 import java.time.LocalDate;
-import entity.Category;
-import entity.Source;
 import java.util.List;
 
 
@@ -18,6 +18,5 @@ public interface ViewTransactionDataAccessInterface {
     List<Transaction> getByDateRange(LocalDate startDate, LocalDate endDate);
 
     Category getSourceCategory(Source source);
-
 
 }
