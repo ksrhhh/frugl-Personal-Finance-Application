@@ -18,13 +18,14 @@ public class Main {
                 .addDashboardView()
                 .addDashboardUseCase()
                 .addTransactionsView()
-                .TransactionViewUseCase()
+                .transactionViewUseCase()
                 .build();
 
         application.pack();
         application.setLocationRelativeTo(null);
         application.setVisible(true);
     }
+
 }
 
 

@@ -5,11 +5,9 @@ import java.awt.CardLayout;
 import javax.swing.*;
 
 import charts.PieChartRenderer;
-import charts.ProcessedPieChartData;
 import charts.TimeChartRenderer;
 import data_access.GoalDataAccessObject;
 import data_access.TransactionDataAccessObject;
-import entity.Goal;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.autosave.AutosaveController;
 import interface_adapter.autosave.AutosavePresenter;
@@ -25,7 +23,6 @@ import interface_adapter.set_goal.SetGoalPresenter;
 import interface_adapter.set_goal.SetGoalViewModel;
 import interface_adapter.view_transaction.ViewTransactionController;
 import interface_adapter.view_transaction.ViewTransactionPresenter;
-import interface_adapter.view_transaction.ViewTransactionState;
 import interface_adapter.view_transaction.ViewTransactionViewModel;
 import use_case.autosave.AutosaveInputBoundary;
 import use_case.autosave.AutosaveInteractor;
@@ -148,7 +145,6 @@ public class AppBuilder {
         return this.dashboardView;
     }
 
-
     public AppBuilder addTransactionsView() {
         viewTransactionViewModel = new ViewTransactionViewModel();
         viewTransactionView = new TransactionsView(viewTransactionViewModel);
@@ -157,8 +153,7 @@ public class AppBuilder {
         return this;
     }
 
-    public AppBuilder TransactionViewUseCase() {
-
+    public AppBuilder transactionViewUseCase() {
 
         final ViewTransactionOutputBoundary viewTransactionOutputBoundary = new ViewTransactionPresenter(viewManagerModel, viewTransactionViewModel);
         final ViewTransactionInputBoundary viewTransactionInputBoundary = new ViewTransactionInteractor(transactionDataAccessObject, viewTransactionOutputBoundary);
