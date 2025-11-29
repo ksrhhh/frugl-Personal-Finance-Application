@@ -14,16 +14,22 @@ public class AutosaveInteractor implements AutosaveInputBoundary {
         this.autosaveOutputBoundary = autosaveOutputBoundary;
     }
 
+    /**
+     * Executes an autosave request.
+     *
+     * @param inputData contextual input for the request
+     */
     @Override
     public void execute(AutosaveInputData inputData) {
         try {
             autosaveDataAccessObject.save();
-            AutosaveOutputData outputData = new AutosaveOutputData(
+            final AutosaveOutputData outputData = new AutosaveOutputData(
                     "Autosave completed successfully",
                     LocalDateTime.now());
             autosaveOutputBoundary.presentSuccess(outputData);
-        } catch (RuntimeException e) {
-            String errorMessage = "Failed to save data: " + e.getMessage();
+        }
+        catch (RuntimeException ex) {
+            final String errorMessage = "Failed to save data: " + ex.getMessage();
             autosaveOutputBoundary.presentFailure(errorMessage);
         }
     }

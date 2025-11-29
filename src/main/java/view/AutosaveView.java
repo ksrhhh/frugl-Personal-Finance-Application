@@ -17,6 +17,9 @@ import interface_adapter.autosave.AutosaveViewModel;
 
 public class AutosaveView extends JPanel implements PropertyChangeListener {
 
+    private static final long serialVersionUID = 1L;
+    private static final int STATUS_BUTTON_SPACING_PX = 8;
+    private static final int AUTOSAVE_INTERVAL_MS = 5_000;
 
     private AutosaveController controller;
     private final AutosaveViewModel viewModel;
@@ -24,52 +27,75 @@ public class AutosaveView extends JPanel implements PropertyChangeListener {
     private final JButton saveNowButton = new JButton("Save Now");
     private final Timer autosaveTimer;
 
+    /**
+     * Creates the swing view for the autosave use case.
+     *
+     * @param viewModel autosave view model
+     */
     public AutosaveView(AutosaveViewModel viewModel) {
         this.viewModel = viewModel;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(statusLabel);
-        add(Box.createHorizontalStrut(8));
+        add(Box.createHorizontalStrut(STATUS_BUTTON_SPACING_PX));
         add(saveNowButton);
 
-        AutosaveState state = viewModel.getState();
+        final AutosaveState state = viewModel.getState();
         statusLabel.setText(labelText(state.getStatusMessage(), state.getLastSavedAt(),
                 state.getErrorMessage()));
 
         this.viewModel.addPropertyChangeListener(this);
-        saveNowButton.addActionListener(e -> controller.autosaveNow());
+        saveNowButton.addActionListener(actionEvent -> controller.autosaveNow());
 
-        autosaveTimer = new Timer(5_000, e -> this.controller.autosaveNow());
+        autosaveTimer = new Timer(AUTOSAVE_INTERVAL_MS, timerEvent -> this.controller.autosaveNow());
         autosaveTimer.setRepeats(true);
         autosaveTimer.start();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-//        if (!"autosaveState".equals(evt.getPropertyName())) {
-//            return;
-//        }
-        AutosaveState state = (AutosaveState) evt.getNewValue();
+        final AutosaveState state = (AutosaveState) evt.getNewValue();
         statusLabel.setText(labelText(state.getStatusMessage(), state.getLastSavedAt(), state.getErrorMessage()));
     }
 
+    /**
+     * Formats a user-facing label based on autosave state.
+     *
+     * @param statusMessage text describing the state
+     * @param timestamp     latest save timestamp, if available
+     * @param errorMessage  latest error, if any
+     * @return formatted label text
+     */
     private String labelText(String statusMessage, LocalDateTime timestamp, String errorMessage) {
+        String message = "";
         if (errorMessage != null) {
-            return "Autosave failed: " + errorMessage;
+            message += "Autosave failed: " + errorMessage;
         }
         if (timestamp != null) {
-            return statusMessage + " (" + timestamp + ")";
+            message += statusMessage + " (" + timestamp + ")";
         }
-        return statusMessage;
+        else {
+            message += statusMessage;
+        }
+        return message;
     }
 
-    public void setupAutosaveController(AutosaveController controller) {
-        this.controller = controller;
+    /**
+     * Registers the autosave controller used for manual and scheduled saves.
+     *
+     * @param autosaveController autosave controller
+     */
+    public void setupAutosaveController(AutosaveController autosaveController) {
+        this.controller = autosaveController;
     }
 
+    /**
+     * Returns the identifier for this view.
+     *
+     * @return view name from the view model
+     */
     public String getViewName() {
         return viewModel.getViewName();
     }
 
 }
-
-
