@@ -1,7 +1,9 @@
 package app;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -69,15 +71,20 @@ public class AppBuilder {
     }
 
     /**
-     * Initializes the autosave view.
+     * Initializes the autosave view as a status bar.
      *
      * @return this builder
      */
     public AppBuilder addAutosaveView() {
         autosaveViewModel = new AutosaveViewModel();
         autosaveView = new AutosaveView(autosaveViewModel);
-
-        cardPanel.add(autosaveView, autosaveView.getViewName());
+        
+        autosaveView.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(1, 0, 0, 0, java.awt.Color.GRAY),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        
+        // it is not added to card panel since it will be added as a status bar in build()
         return this;
     }
 
@@ -202,7 +209,16 @@ public class AppBuilder {
     public JFrame build() {
         final JFrame application = new JFrame("frugl");
 
-        application.add(cardPanel);
+        final JPanel mainPanel = new JPanel(new BorderLayout());
+        
+        mainPanel.add(cardPanel, BorderLayout.CENTER);
+        
+        // autosave view is added as a status bar
+        if (autosaveView != null) {
+            mainPanel.add(autosaveView, BorderLayout.SOUTH);
+        }
+
+        application.add(mainPanel);
         viewManagerModel.setState(importStatementViewModel.getViewName());
         viewManagerModel.firePropertyChange();
         return application;

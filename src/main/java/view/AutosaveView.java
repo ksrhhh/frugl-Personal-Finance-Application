@@ -3,10 +3,9 @@ package view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -18,13 +17,11 @@ import interface_adapter.autosave.AutosaveViewModel;
 public class AutosaveView extends JPanel implements PropertyChangeListener {
 
     private static final long serialVersionUID = 1L;
-    private static final int STATUS_BUTTON_SPACING_PX = 8;
     private static final int AUTOSAVE_INTERVAL_MS = 5_000;
 
     private AutosaveController controller;
     private final AutosaveViewModel viewModel;
     private final JLabel statusLabel = new JLabel();
-    private final JButton saveNowButton = new JButton("Save Now");
     private final Timer autosaveTimer;
 
     /**
@@ -36,17 +33,18 @@ public class AutosaveView extends JPanel implements PropertyChangeListener {
         this.viewModel = viewModel;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(statusLabel);
-        add(Box.createHorizontalStrut(STATUS_BUTTON_SPACING_PX));
-        add(saveNowButton);
 
         final AutosaveState state = viewModel.getState();
         statusLabel.setText(labelText(state.getStatusMessage(), state.getLastSavedAt(),
                 state.getErrorMessage()));
 
         this.viewModel.addPropertyChangeListener(this);
-        saveNowButton.addActionListener(actionEvent -> controller.autosaveNow());
 
-        autosaveTimer = new Timer(AUTOSAVE_INTERVAL_MS, timerEvent -> this.controller.autosaveNow());
+        autosaveTimer = new Timer(AUTOSAVE_INTERVAL_MS, timerEvent -> {
+            if (controller != null) {
+                this.controller.autosaveNow();
+            }
+        });
         autosaveTimer.setRepeats(true);
         autosaveTimer.start();
     }
@@ -67,21 +65,31 @@ public class AutosaveView extends JPanel implements PropertyChangeListener {
      * @return formatted label text
      */
     private String labelText(String statusMessage, LocalDateTime timestamp, String errorMessage) {
-        String message = "";
         if (errorMessage != null) {
-            message += "Autosave failed: " + errorMessage;
+            return "⚠ Autosave failed: " + errorMessage;
         }
+        
         if (timestamp != null) {
-            message += statusMessage + " (" + timestamp + ")";
+            String formattedTime = formatTimestamp(timestamp);
+            return "✓ Saved at " + formattedTime;
         }
-        else {
-            message += statusMessage;
-        }
-        return message;
+        
+        return statusMessage;
+    }
+    
+    /**
+     * Formats a timestamp to a user-friendly string.
+     *
+     * @param timestamp the timestamp to format
+     * @return formatted time string
+     */
+    private String formatTimestamp(LocalDateTime timestamp) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        return timestamp.format(formatter);
     }
 
     /**
-     * Registers the autosave controller used for manual and scheduled saves.
+     * Registers the autosave controller used for scheduled saves.
      *
      * @param autosaveController autosave controller
      */
