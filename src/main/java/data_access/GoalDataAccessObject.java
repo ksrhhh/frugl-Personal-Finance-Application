@@ -48,8 +48,8 @@ public class GoalDataAccessObject implements SetGoalDataAccessInterface, Autosav
                     this.goals = new ArrayList<>();
                 }
             }
-            catch (IOException error) {
-                System.err.println("Error loading goals from JSON: " + error.getMessage());
+            catch (IOException ex) {
+                System.err.println("Error loading goals from JSON: " + ex.getMessage());
                 this.goals = new ArrayList<>();
             }
         }
@@ -58,19 +58,26 @@ public class GoalDataAccessObject implements SetGoalDataAccessInterface, Autosav
         }
     }
 
-    private void save() throws IOException {
+    @Override
+    public void save() {
+        try {
+            if (jsonFile.getParentFile() != null && !jsonFile.getParentFile().exists()) {
+                jsonFile.getParentFile().mkdirs();
+            }
 
-        if (jsonFile.getParentFile() != null && !jsonFile.getParentFile().exists()) {
-            jsonFile.getParentFile().mkdirs();
+            try (FileWriter writer = new FileWriter(jsonFile)) {
+                gson.toJson(goals, writer);
+            }
         }
-        try (FileWriter writer = new FileWriter(jsonFile)) {
-            gson.toJson(goals, writer);
+        catch (IOException ex) {
+            System.err.println("Error saving goals to JSON: " + ex.getMessage());
+            throw new RuntimeException("Failed to save goals", ex);
         }
     }
 
     @Override
-    public void saveGoal(Goal goal) throws IOException {
-        goals.removeIf(existing_goal -> existing_goal.getMonth().equals(goal.getMonth()));
+    public void saveGoal(Goal goal) {
+        goals.removeIf(geo -> geo.getMonth().equals(goal.getMonth()));
         goals.add(goal);
         save();
     }
