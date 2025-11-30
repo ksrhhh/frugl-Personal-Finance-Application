@@ -12,7 +12,6 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import entity.Goal;
 import use_case.autosave.AutosaveDataAccessInterface;
 import use_case.set_goal.SetGoalDataAccessInterface;
@@ -41,18 +40,20 @@ public class GoalDataAccessObject implements SetGoalDataAccessInterface, Autosav
     private void load() {
         if (jsonFile.exists() && jsonFile.length() > 0) {
             try (FileReader reader = new FileReader(jsonFile)) {
-                Type listType = new TypeToken<List<Goal>>() {
+                final Type listType = new TypeToken<List<Goal>>() {
                 }.getType();
 
                 this.goals = gson.fromJson(reader, listType);
                 if (this.goals == null) {
                     this.goals = new ArrayList<>();
                 }
-            } catch (IOException e) {
-                System.err.println("Error loading goals from JSON: " + e.getMessage());
+            }
+            catch (IOException ex) {
+                System.err.println("Error loading goals from JSON: " + ex.getMessage());
                 this.goals = new ArrayList<>();
             }
-        } else {
+        }
+        else {
             this.goals = new ArrayList<>();
         }
     }
@@ -67,15 +68,16 @@ public class GoalDataAccessObject implements SetGoalDataAccessInterface, Autosav
             try (FileWriter writer = new FileWriter(jsonFile)) {
                 gson.toJson(goals, writer);
             }
-        } catch (IOException e) {
-            System.err.println("Error saving goals to JSON: " + e.getMessage());
-            throw new RuntimeException("Failed to save goals", e);
+        }
+        catch (IOException ex) {
+            System.err.println("Error saving goals to JSON: " + ex.getMessage());
+            throw new RuntimeException("Failed to save goals", ex);
         }
     }
 
     @Override
     public void saveGoal(Goal goal) {
-        goals.removeIf(g -> g.getMonth().equals(goal.getMonth()));
+        goals.removeIf(geo -> geo.getMonth().equals(goal.getMonth()));
         goals.add(goal);
         save();
     }
