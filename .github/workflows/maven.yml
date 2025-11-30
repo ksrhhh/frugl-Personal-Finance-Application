@@ -28,4 +28,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Checkstyle with Maven
-      run: mvn checkstyle:check
+      run: mvn checkstyle:check -Dcheckstyle.config.location=config/checkstyle/checkstyle.xml
