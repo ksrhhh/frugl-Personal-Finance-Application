@@ -6,6 +6,7 @@ import entity.GoalTree;
 import entity.Transaction;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -151,8 +152,8 @@ class SetGoalInteractorTest {
 
         SetGoalDataAccessInterface goalRepo = new SetGoalDataAccessInterface() {
             @Override
-            public void saveGoal(Goal goal) {
-                throw new RuntimeException("Simulated DB failure");
+            public void saveGoal(Goal goal) throws IOException{
+                throw new IOException("Simulated DB failure");
             }
 
             @Override
