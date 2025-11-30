@@ -106,10 +106,6 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
         importStatementController = controller;
     }
 
-    public String getViewName() {
-        return viewName;
-    }
-
 }
 
 

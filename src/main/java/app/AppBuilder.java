@@ -82,7 +82,7 @@ public class AppBuilder {
         importStatementViewModel = new ImportStatementViewModel();
         importStatementView = new ImportStatementView(importStatementViewModel, viewManagerModel);
 
-        cardPanel.add(importStatementView, importStatementView.getViewName());
+        cardPanel.add(importStatementView, importStatementViewModel.getViewName());
         return this;
     }
 
@@ -94,7 +94,7 @@ public class AppBuilder {
                 new ImportStatementInteractor(transactionDataAccessObject, importStatementOutputBoundary,
                         geminiCategorizer);
         ImportStatementController importStatementController =
-                new ImportStatementController(importStatementInputBoundary, viewManagerModel);
+                new ImportStatementController(importStatementInputBoundary);
 
         importStatementView.setImportStatementController(importStatementController);
         return this;
