@@ -1,15 +1,22 @@
 package view;
 
-import interface_adapter.ViewManagerModel;
-import interface_adapter.import_statement.ImportStatementController;
-import interface_adapter.import_statement.ImportStatementViewModel;
-import java.awt.*;
+
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+
 import javax.swing.*;
+
+import interface_adapter.ViewManagerModel;
+import interface_adapter.import_statement.ImportStatementController;
+import interface_adapter.import_statement.ImportStatementViewModel;
+
+
 
 
 /**
@@ -17,13 +24,19 @@ import javax.swing.*;
  */
 public class ImportStatementView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "import statement";
+
     private final ImportStatementViewModel importStatementViewModel;
+
     private final ViewManagerModel viewManagerModel;
+
     private ImportStatementController importStatementController = null;
 
     private final JTextField filePathField;
+
     private final JButton importButton;
+
     private final JButton backButton;
+
     private final JButton browseButton;
 
     public ImportStatementView(ImportStatementViewModel viewModel, ViewManagerModel viewManagerModel) {
@@ -84,12 +97,10 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
                 File selectedFile = chooser.getSelectedFile();
                 filePathField.setText(selectedFile.getAbsolutePath());
             }
-        }
-        else if (e.getSource() == importButton) {
+        } else if (e.getSource() == importButton) {
             String filePath = filePathField.getText().trim();
             importStatementController.execute(filePath);
-        }
-        else if (e.getSource() == backButton) {
+        } else if (e.getSource() == backButton) {
             viewManagerModel.setState("dashboard");
             viewManagerModel.firePropertyChange();
         }

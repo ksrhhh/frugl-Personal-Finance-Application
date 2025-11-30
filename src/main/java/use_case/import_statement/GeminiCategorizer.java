@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import entity.Category;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -21,10 +22,12 @@ import okhttp3.Response;
  */
 public class GeminiCategorizer {
     private final OkHttpClient client = new OkHttpClient();
+
     private final String apiKey;
 
     private final String apiUrl =
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
+
     private final Gson gson = new Gson();
 
     public GeminiCategorizer(String apiKey) {
@@ -71,11 +74,11 @@ public class GeminiCategorizer {
      * */
     private String buildPrompt(List<String> sources) {
         return "Classify each of the following vendor names into one of the categories:\n"
-            + "- Income\n- Transportation\n- Rent and Utilities\n- Food and Dining\n- Shopping\n- Other\n\n"
-            + "Return ONLY a JSON object mapping vendor→category. Example:\n"
-            + "{ \"Uber\": \"Transportation\", \"McDonalds\": \"Food and Dining\" }\n\n"
-            + "Vendors:\n"
-            + gson.toJson(sources);
+                + "- Income\n- Transportation\n- Rent and Utilities\n- Food and Dining\n- Shopping\n- Other\n\n"
+                + "Return ONLY a JSON object mapping vendor→category. Example:\n"
+                + "{ \"Uber\": \"Transportation\", \"McDonalds\": \"Food and Dining\" }\n\n"
+                + "Vendors:\n"
+                + gson.toJson(sources);
     }
 
     /**
@@ -90,8 +93,7 @@ public class GeminiCategorizer {
         try {
             final int sleepTime = 100;
             Thread.sleep(sleepTime);
-        }
-        catch (InterruptedException exception) {
+        } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
         }
 
@@ -108,14 +110,14 @@ public class GeminiCategorizer {
         requestJson.add("contents", contentsArray);
 
         final RequestBody body = RequestBody.create(
-            requestJson.toString(),
-            MediaType.parse("application/json")
+                requestJson.toString(),
+                MediaType.parse("application/json")
         );
 
         final Request request = new Request.Builder()
-            .url(apiUrl + apiKey)
-            .post(body)
-            .build();
+                .url(apiUrl + apiKey)
+                .post(body)
+                .build();
 
         try (Response response = client.newCall(request).execute()) {
 
@@ -150,8 +152,8 @@ public class GeminiCategorizer {
         }
 
         final JsonObject content = candidates.get(0)
-            .getAsJsonObject()
-            .getAsJsonObject("content");
+                .getAsJsonObject()
+                .getAsJsonObject("content");
 
         final JsonArray parts = content.getAsJsonArray("parts");
         if (parts == null || parts.isEmpty()) {
@@ -159,17 +161,16 @@ public class GeminiCategorizer {
         }
 
         String modelText = parts.get(0)
-            .getAsJsonObject()
-            .get("text")
-            .getAsString();
+                .getAsJsonObject()
+                .get("text")
+                .getAsString();
 
         modelText = stripMarkdownCodeFence(modelText);
 
         final JsonObject parsedCategories;
         try {
             parsedCategories = JsonParser.parseString(modelText).getAsJsonObject();
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new Exception("Gemini response was not valid JSON: " + modelText);
         }
 
