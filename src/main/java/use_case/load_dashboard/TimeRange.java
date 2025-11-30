@@ -18,5 +18,8 @@ public enum TimeRange {
     public String toString() {
         return displayName;
     }
-    public int getValue() {return value;}
+
+    public int getValue() {
+        return value;
+    }
 }
