@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ViewTransactionInteractorTest {
+class ViewTransactionInteractorTest {
 
     //creating a mock DAO
     class MockTransactionDAO implements ViewTransactionDataAccessInterface {
@@ -94,9 +94,8 @@ public class ViewTransactionInteractorTest {
         }
 
         private List<Transaction> getMarchTransactions() {
-            List<Transaction> list = new ArrayList<>();
 
-            return list;
+            return null;
         }
 
     }
@@ -164,7 +163,7 @@ public class ViewTransactionInteractorTest {
 
             @Override
             public void prepareFailView(String error) {
-                assertEquals(error, "No data available.");
+                assertEquals("No data available.", error);
             }
         };
         ViewTransactionInteractor interactor = new ViewTransactionInteractor(viewTransactionDAO,successPresenter );
