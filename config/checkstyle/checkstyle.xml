@@ -4,32 +4,19 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
-    <!--
-        If you set the basedir property below, then all reported file
-        names will be relative to the specified directory. See
-        https://checkstyle.org/config.html#Checker
-
-        <property name="basedir" value="${basedir}"/>
-    -->
 
     <metadata name="org.checkstyle.principle" value="Practice What You Preach"/>
     <metadata name="org.checkstyle.principle.description"
               value="In our config we should use all Checks that Checkstyle has"/>
 
-    <module name="TreeWalker">
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="ClassDataAbstractionCoupling"/>
+        <property name="files" value="AppBuilder\.java"/>
+    </module>
 
-        <!-- Suppress ClassDataAbstractionCoupling for AppBuilder -->
-        <module name="SuppressionSingleFilter">
-            <property name="checks" value="ClassDataAbstractionCoupling"/>
-            <property name="files" value="AppBuilder\.java"/>
-        </module>
-
-        <!-- Suppress ClassFanOutComplexity for AppBuilder -->
-        <module name="SuppressionSingleFilter">
-            <property name="checks" value="ClassFanOutComplexity"/>
-            <property name="files" value="AppBuilder\.java"/>
-        </module>
-
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="ClassFanOutComplexity"/>
+        <property name="files" value="AppBuilder\.java"/>
     </module>
 
     <property name="severity" value="error"/>
