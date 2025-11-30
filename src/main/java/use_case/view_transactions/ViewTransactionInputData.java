@@ -1,5 +1,7 @@
 package use_case.view_transactions;
 
+import entity.Transaction;
+
 import java.time.LocalDate;
 
 public class ViewTransactionInputData {
@@ -13,9 +15,11 @@ public class ViewTransactionInputData {
 
     }
 
+
     public LocalDate getStartDate() {
         return startDate;
     }
+
 
     public LocalDate getEndDate() {
         return endDate;
