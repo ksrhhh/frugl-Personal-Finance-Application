@@ -19,6 +19,10 @@ public class GeminiCategorizer {
 
     private static final Gson gson = new Gson();
 
+    public GeminiCategorizer() {
+        this.apiKey = null;
+    }
+
     public GeminiCategorizer(String apiKey) {
         this.apiKey = apiKey;
     }
@@ -59,7 +63,7 @@ public class GeminiCategorizer {
      */
     private String buildPrompt(List<String> sources) {
         return "Classify each of the following vendor names into one of the categories:\n" +
-                "- Income\n- Transportation\n- Rent & Utilities\n- Food & Dining\n- Shopping\n- Other\n\n" +
+                "- Income\n- Transportation\n- Rent and Utilities\n- Food and Dining\n- Shopping\n- Other\n\n" +
                 "Return ONLY a JSON object mapping vendor→category. Example:\n" +
                 "{ \"Uber\": \"Transportation\", \"McDonalds\": \"Food & Dining\" }\n\n" +
                 "Vendors:\n" +

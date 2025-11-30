@@ -33,8 +33,8 @@ public class ImportStatementInteractor implements ImportStatementInputBoundary {
     @Override
     public void execute(ImportStatementInputData inputData) {
 
-        if (inputData.getFilePath() == null || inputData.getFilePath().isBlank()) {
-            presenter.prepareFailView("file does not exist");
+        if (inputData.getFilePath().isBlank()) {
+            presenter.prepareFailView("blank file path");
             return;
         }
 
@@ -48,7 +48,7 @@ public class ImportStatementInteractor implements ImportStatementInputBoundary {
         try {
             transactionsJsonArray = readArrayFromFile(inputData.getFilePath());
         } catch (Exception e) {
-            presenter.prepareFailView("unsupported file");
+            presenter.prepareFailView("file does not contain a JSON array");
             return;
         }
 
@@ -165,12 +165,15 @@ public class ImportStatementInteractor implements ImportStatementInputBoundary {
             if (!tx.has("source") || !tx.has("amount") || !tx.has("date")) {
                 throw new Exception("Missing fields in transaction");
             }
+        }
+        for (JsonObject tx : transactions) {
             String sourceName = tx.get("source").getAsString();
             double amount = tx.get("amount").getAsDouble();
             String dateString = tx.get("date").getAsString();
             Transaction transaction = new Transaction(new Source(sourceName), amount, LocalDate.parse(dateString));
             transactionsDataAccessObject.addTransaction(transaction);
         }
+
     }
 
     private YearMonth extractYearMonth(JsonArray array) {
