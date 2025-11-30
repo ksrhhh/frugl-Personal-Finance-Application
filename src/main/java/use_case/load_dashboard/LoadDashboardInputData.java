@@ -15,8 +15,19 @@ public class LoadDashboardInputData {
         this.endDate = endDate;
     }
 
-    public LocalDate getCurrentDate() {return currentDate;}
-    public TimeRange getTimeRange() {return timeRange;}
-    public LocalDate getStartDate() {return startDate;}
-    public LocalDate getEndDate() {return endDate;}
+    public LocalDate getCurrentDate() {
+        return currentDate;
+    }
+
+    public TimeRange getTimeRange() {
+        return timeRange;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 }
