@@ -11,17 +11,17 @@ public class Main {
      *
      * @param args command line arguments (not used)
      */
-    public static void main(String[] args) {
-        final AppBuilder appBuilder = new AppBuilder();
-        final JFrame application = appBuilder
+    public static void main(String[] args) throws Exception {
+        AppBuilder appBuilder = new AppBuilder();
+        JFrame application = appBuilder
+                .addDashboardView()
+                .addDashboardUseCase()
                 .addAutosaveView()
                 .addAutosaveUseCase()
                 .addImportStatementView()
                 .addImportStatementUseCase()
                 .addSetGoalView()
                 .addGoalUseCase()
-                .addDashboardView()
-                .addDashboardUseCase()
                 .build();
 
         application.pack();

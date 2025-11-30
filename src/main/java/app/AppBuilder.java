@@ -212,10 +212,9 @@ public class AppBuilder {
      * @return a JFrame application frame ready to display
      */
     public JFrame build() {
-        final JFrame application = new JFrame("frugl");
-
+        JFrame application = new JFrame("frugl");
         final JPanel mainPanel = new JPanel(new BorderLayout());
-        
+
         mainPanel.add(cardPanel, BorderLayout.CENTER);
         
         // autosave view is added as a status bar
@@ -224,7 +223,7 @@ public class AppBuilder {
         }
 
         application.add(mainPanel);
-        viewManagerModel.setState(importStatementViewModel.getViewName());
+        viewManagerModel.setState(dashboardViewModel.getViewName());
         viewManagerModel.firePropertyChange();
         return application;
     }
