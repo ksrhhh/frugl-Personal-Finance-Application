@@ -180,7 +180,8 @@ public class TransactionsView extends JPanel implements ActionListener, Property
         if ("state".equals(evt.getPropertyName())) {
             ViewTransactionState state = (ViewTransactionState) evt.getNewValue();
             rebuildTiles(state.getMonthlyTransactions());
-        }}
+        }
+    }
 
     public String getViewName() {
         return VIEW_TRANSACTION_VIEW_NAME;
