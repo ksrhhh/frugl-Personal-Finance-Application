@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
@@ -7,15 +8,18 @@ import use_case.load_dashboard.TimeRange;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class DashboardView extends JPanel{
+public class DashboardView extends JPanel implements PropertyChangeListener {
     private DashboardController controller;
     private final DashboardViewModel viewModel;
+    private final ViewManagerModel viewManagerModel;
 
     //UI Components
     private JComboBox<TimeRange> timeRangeDropdown;
@@ -25,17 +29,19 @@ public class DashboardView extends JPanel{
     private JLabel pieChartLabel;
     private JLabel timeChartLabel;
 
-    public DashboardView(DashboardViewModel viewModel) {
+    public DashboardView(DashboardViewModel viewModel,  ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;
 
+        this.viewManagerModel = viewManagerModel;
+        this.viewModel.addPropertyChangeListener(this);
+
         setupUI();
-        loadInitialData();
     }
 
     private void setupUI() {
         this.setLayout(new BorderLayout());
 
-        JPanel splitPanel = new JPanel(new BorderLayout());
+        JPanel splitPanel = new JPanel(new GridLayout(1, 2));
         splitPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // ---- LEFT SIDE: TIME CHART PANEL ----
@@ -79,11 +85,25 @@ public class DashboardView extends JPanel{
         pieChartLabel = new JLabel("Loading Pie Chart...", SwingConstants.CENTER);
         rightPanel.add(pieChartLabel, BorderLayout.CENTER);
 
+        splitPanel.add(leftPanel);
+        splitPanel.add(rightPanel);
+        this.add(splitPanel, BorderLayout.CENTER);
+
         // BOTTOM PANEL
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton refreshButton = new JButton("Refresh Dashboard");
-        refreshButton.addActionListener(e -> onRefreshClicked());
+        refreshButton.addActionListener(e -> {
+            try {
+                onRefreshClicked();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         bottomPanel.add(refreshButton);
+        JButton importStatementButton = new JButton("Import Statement");
+        importStatementButton.addActionListener(e -> onImportStatementClicked());
+        bottomPanel.add(importStatementButton);
+
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -96,11 +116,16 @@ public class DashboardView extends JPanel{
         return spinner;
     }
 
-    private void loadInitialData() {
+    public void loadInitialData() throws Exception {
         onRefreshClicked();
     }
 
-    private void onRefreshClicked() {
+    private void onImportStatementClicked() {
+        viewManagerModel.setState("import statement");
+        viewManagerModel.firePropertyChange();
+    }
+
+    private void onRefreshClicked() throws Exception {
         TimeRange selectedTimeRange = (TimeRange) timeRangeDropdown.getSelectedItem();
 
         Date legacyStartDate = (Date) startDateSpinner.getValue();
@@ -109,10 +134,9 @@ public class DashboardView extends JPanel{
         LocalDate startDate = convertToLocalDate(legacyStartDate);
         LocalDate endDate = convertToLocalDate(legacyEndDate);
 
-        LocalDate currentDate = LocalDate.ofEpochDay(System.currentTimeMillis());
+        LocalDate currentDate = LocalDate.now();
 
         controller.loadDashboard(currentDate, selectedTimeRange, startDate, endDate);
-        updateChartDisplay();
     }
 
     // Helper to convert Date to LocalDate
@@ -132,18 +156,27 @@ public class DashboardView extends JPanel{
             timeChartLabel.setText("No Data");
             timeChartLabel.setIcon(null);
         } else {
-            if (chartImages.size() > 0 ){
-                timeChartLabel.setText("");
-                timeChartLabel.setIcon(new ImageIcon(chartImages.get(0)));
-            }
-            if (chartImages.size() > 1){
-                pieChartLabel.setText("");
-                pieChartLabel.setIcon(new ImageIcon(chartImages.get(1)));
+            timeChartLabel.setText("");
+            timeChartLabel.setIcon(new ImageIcon(chartImages.get(1)));
+            pieChartLabel.setText("");
+            pieChartLabel.setIcon(new ImageIcon(chartImages.get(0)));
             }
         }
+
+    public void setDashboardController(DashboardController controller) {
+        this.controller = controller;
     }
 
-    public void setDashboardController(DashboardController controller){
-        this.controller = controller;
+    public void propertyChange(PropertyChangeEvent evt) {
+        DashboardState state = (DashboardState)  evt.getNewValue();
+
+        SwingUtilities.invokeLater(() -> {
+            if (state.getChartImages() != null) {
+                updateChartDisplay();
+            }
+
+            this.revalidate();
+            this.repaint();
+        });
     }
 }

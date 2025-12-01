@@ -54,15 +54,21 @@ public class ViewModel<T> {
     }
 
     /**
+     * Fires a property changed  with a custom newValue
+     * it can use the property name to distinguish which property has changed.
+     * @param propertyName the label for the property that was changed
+     * @param newValue the new value to be made accessible
+     */
+    public void firePropertyChange(String propertyName, Object newValue) {
+        this.support.firePropertyChange(propertyName, null, newValue);
+    }
+
+    /**
      * Adds a PropertyChangeListener to this ViewModel.
      * @param listener The PropertyChangeListener to be added
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.support.addPropertyChangeListener(listener);
-    }
-
-    public void firePropertyChange(String propertyName, Object newValue) {
-        this.support.firePropertyChange(propertyName, null, newValue);
     }
 
 }

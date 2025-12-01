@@ -2,11 +2,21 @@ package app;
 
 import javax.swing.JFrame;
 
+import view.DashboardView;
+
 public class Main {
 
-    public static void main(String[] args) {
-        AppBuilder appBuilder = new AppBuilder();
-        JFrame application = appBuilder
+    /**
+     * Main entry point for the application.
+     *
+     * @param args command line arguments (not used)
+     * @throws Exception exception
+     */
+    public static void main(String[] args) throws Exception {
+        final AppBuilder appBuilder = new AppBuilder();
+        final JFrame application = appBuilder
+                .addDashboardView()
+                .addDashboardUseCase()
                 .addAutosaveView()
                 .addAutosaveUseCase()
                 .addImportStatementView()
@@ -18,7 +28,10 @@ public class Main {
         application.pack();
         application.setLocationRelativeTo(null);
         application.setVisible(true);
+
+        final DashboardView dashboardView = appBuilder.getDashboardView();
+        if (dashboardView != null) {
+            dashboardView.loadInitialData();
+        }
     }
 }
-
-

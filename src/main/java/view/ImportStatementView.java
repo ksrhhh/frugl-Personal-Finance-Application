@@ -97,10 +97,12 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
                 File selectedFile = chooser.getSelectedFile();
                 filePathField.setText(selectedFile.getAbsolutePath());
             }
-        } else if (e.getSource() == importButton) {
+        }
+        else if (e.getSource() == importButton) {
             String filePath = filePathField.getText().trim();
             importStatementController.execute(filePath);
-        } else if (e.getSource() == backButton) {
+        }
+        else if (e.getSource() == backButton) {
             viewManagerModel.setState("dashboard");
             viewManagerModel.firePropertyChange();
         }
