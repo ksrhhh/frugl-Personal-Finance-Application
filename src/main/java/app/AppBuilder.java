@@ -143,7 +143,7 @@ public class AppBuilder {
     public AppBuilder addImportStatementUseCase() {
         final ImportStatementOutputBoundary importStatementOutputBoundary =
                 new ImportStatementPresenter(viewManagerModel, importStatementViewModel);
-        final GeminiCategorizer geminiCategorizer = new GeminiCategorizer(System.getenv("API_KEY"));
+        final GeminiCategorizer geminiCategorizer = new GeminiCategorizer(System.getenv("GEMINI_API_KEY"));
         final ImportStatementInputBoundary importStatementInputBoundary =
                 new ImportStatementInteractor(transactionDataAccessObject, importStatementOutputBoundary,
                         geminiCategorizer);
@@ -161,7 +161,7 @@ public class AppBuilder {
      */
     public AppBuilder addSetGoalView() {
         setGoalViewModel = new SetGoalViewModel();
-        goalView = new GoalView(setGoalViewModel);
+        goalView = new GoalView(setGoalViewModel, viewManagerModel);
 
         cardPanel.add(goalView, setGoalViewModel.getViewName());
         return this;
@@ -222,24 +222,22 @@ public class AppBuilder {
     public DashboardView getDashboardView() {
         return this.dashboardView;
     }
+
     /**
      * Get TransactionView.
      * @return TransactionView
      */
-
     public AppBuilder addTransactionsView() {
         viewTransactionViewModel = new ViewTransactionViewModel();
-        viewTransactionView = new TransactionsView(viewTransactionViewModel);
+        viewTransactionView = new TransactionsView(viewTransactionViewModel, viewManagerModel);
         cardPanel.add(viewTransactionView, viewTransactionViewModel.getViewName());
 
-        // WAS: return viewTransactionView;
         return this;
     }
     /**
-     * Does transactionViewUseCase.
+     * Does transactionViewUseCases.
      * @return transactionViewUseCase
      */
-
     public AppBuilder addTransactionViewUseCase() {
 
         final ViewTransactionOutputBoundary viewTransactionOutputBoundary =
