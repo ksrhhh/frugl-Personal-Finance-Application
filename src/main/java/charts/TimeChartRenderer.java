@@ -48,7 +48,7 @@ public class TimeChartRenderer implements ChartRenderer<ProcessedTimeChartData> 
             final String labels = data.getDataPoints().stream()
                     .map(ProcessedTimeChartData.DataPoint::label)
                     .map(label -> "\"" + label + "\"")
-                    .collect(Collectors.joining("|"));
+                    .collect(Collectors.joining(","));
 
             chartConfig = "{\"type\": \"bar\","
                     + "\"data\": {"
