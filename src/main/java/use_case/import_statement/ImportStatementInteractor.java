@@ -158,12 +158,15 @@ public class ImportStatementInteractor implements ImportStatementInputBoundary {
                 throw new ImportStatementException(ERROR_CATEGORIZE_TRANSACTIONS, exception);
             }
 
+            for (String sourceName : sourcesToCategorize) {
+                if (categorizedSources.get(sourceName) == null) {
+                    throw new ImportStatementException(ERROR_CATEGORIZE_TRANSACTIONS);
+                }
+            }
+
             try {
                 for (String sourceName : sourcesToCategorize) {
                     final Category category = categorizedSources.get(sourceName);
-                    if (category == null) {
-                        throw new ImportStatementException(ERROR_CATEGORIZE_TRANSACTIONS);
-                    }
                     transactionsDataAccessObject.addSourceCategory(new Source(sourceName), category);
                 }
             }
