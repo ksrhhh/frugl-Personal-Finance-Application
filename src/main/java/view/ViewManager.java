@@ -39,6 +39,8 @@ public class ViewManager implements PropertyChangeListener {
                 break;
 
             default:
+                final String newStates = (String) evt.getNewValue();
+                cardLayout.show(views, newStates);
                 break;
         }
     }

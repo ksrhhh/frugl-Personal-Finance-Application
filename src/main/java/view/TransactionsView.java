@@ -94,9 +94,8 @@ public class TransactionsView extends JPanel implements ActionListener, Property
         final JLabel monthTitle = new JLabel("Month:");
         final JLabel yearTitle = new JLabel("Year:");
         // Creating okay buttons
-
-        final JButton dateButton = new JButton("Okay");
-        dateButton.addActionListener(evt -> clickedMonth());
+        final JButton dateButton = UserInterfaceFactory.createButton("Okay", evt -> clickedMonth());
+        UserInterfaceFactory.stylePrimaryButton(dateButton);
 
         selectDatePanel.add(yearTitle);
         selectDatePanel.add(dropdownYear);
@@ -104,7 +103,11 @@ public class TransactionsView extends JPanel implements ActionListener, Property
         selectDatePanel.add(dropdownMonth);
         selectDatePanel.add(dateButton);
 
-        this.add(selectDatePanel, BorderLayout.NORTH);
+        final JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(UserInterfaceFactory.createHeader("Transactions"), BorderLayout.NORTH);
+        topPanel.add(selectDatePanel, BorderLayout.SOUTH);
+
+        this.add(topPanel, BorderLayout.NORTH);
 
         // Loading the data
         transactionTilesBlock.setLayout(new BoxLayout(transactionTilesBlock, BoxLayout.Y_AXIS));
@@ -113,11 +116,11 @@ public class TransactionsView extends JPanel implements ActionListener, Property
         this.add(scrollPane, BorderLayout.CENTER);
 
         final JPanel buttonPanel = new JPanel();
-        final JButton backButton = new JButton("Back");
-        backButton.addActionListener(evt -> {
+        final JButton backButton = UserInterfaceFactory.createButton("Back", evt -> {
             viewManagerModel.setState(DashboardViewModel.VIEW_NAME);
             viewManagerModel.firePropertyChange();
         });
+        UserInterfaceFactory.styleSecondaryButton(backButton);
         buttonPanel.add(backButton);
 
         this.add(buttonPanel, BorderLayout.SOUTH);
