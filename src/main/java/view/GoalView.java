@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -28,12 +27,9 @@ import interface_adapter.set_goal.SetGoalViewModel;
 
 public class GoalView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private static final int TITLE_FONT_SIZE = 24;
     private static final Color FOREST_BACKGROUND_COLOR = new Color(191, 246, 191);
-    private static final int VERTICAL_STRUT = 10;
 
     private final transient SetGoalViewModel viewModel;
-    private final transient ViewManagerModel viewManagerModel;
     private transient SetGoalController controller;
 
     private final ForestPanel forestPanel;
@@ -41,26 +37,25 @@ public class GoalView extends JPanel implements ActionListener, PropertyChangeLi
 
     public GoalView(SetGoalViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;
-        this.viewManagerModel = viewManagerModel;
         this.viewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
 
-        final JLabel title = UserInterfaceFactory.createTitleLabel(SetGoalState.TITLE_LABEL, TITLE_FONT_SIZE);
-        this.add(title, BorderLayout.NORTH);
+        this.add(UserInterfaceFactory.createHeader(SetGoalState.TITLE_LABEL), BorderLayout.NORTH);
 
         forestPanel = new ForestPanel();
         this.add(forestPanel, BorderLayout.CENTER);
 
         setGoalButton = UserInterfaceFactory.createButton(SetGoalState.SET_GOAL_BUTTON_LABEL, this);
+        UserInterfaceFactory.stylePrimaryButton(setGoalButton);
         final JPanel buttonPanel = new JPanel();
         buttonPanel.add(setGoalButton);
 
-        final JButton backButton = new JButton("Back");
-        backButton.addActionListener(evt -> {
+        final JButton backButton = UserInterfaceFactory.createButton("Back", evt -> {
             viewManagerModel.setState(DashboardViewModel.VIEW_NAME);
             viewManagerModel.firePropertyChange();
         });
+        UserInterfaceFactory.styleSecondaryButton(backButton);
         buttonPanel.add(backButton);
 
         this.add(buttonPanel, BorderLayout.SOUTH);

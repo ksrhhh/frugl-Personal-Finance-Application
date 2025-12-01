@@ -81,11 +81,13 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(DEFAULT_GAP, DEFAULT_GAP, DEFAULT_GAP, DEFAULT_GAP));
 
-        // 1. Create central split panel for charts
+        this.add(UserInterfaceFactory.createHeader("Dashboard"), BorderLayout.NORTH);
+
+        // 2. Create central split panel for charts
         final JPanel splitPanel = createSplitPanel();
         this.add(splitPanel, BorderLayout.CENTER);
 
-        // 2. Create bottom button panel
+        // Create bottom button panel
         final JPanel bottomPanel = createBottomPanel();
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
@@ -183,27 +185,31 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         // 1. Import Button
-        final JButton importStatementButton = new JButton("Import Statement");
-        importStatementButton.addActionListener(event -> onImportStatementClicked());
+        final JButton importStatementButton = UserInterfaceFactory.createButton(
+                "Import Statement", event -> onImportStatementClicked());
+        UserInterfaceFactory.stylePrimaryButton(importStatementButton);
         bottomPanel.add(importStatementButton);
 
         // 2. Refresh Button
-        final JButton refreshButton = new JButton("Refresh Dashboard");
-        refreshButton.addActionListener(event -> {
-            if (controller != null) {
-                onRefreshClicked();
-            }
-        });
+        final JButton refreshButton = UserInterfaceFactory.createButton(
+                "Refresh Dashboard", event -> {
+                    if (controller != null) {
+                        onRefreshClicked();
+                    }
+                });
+        UserInterfaceFactory.stylePrimaryButton(refreshButton);
         bottomPanel.add(refreshButton);
 
         // 3. Goal Button
-        final JButton goalViewButton = new JButton("View Goals");
-        goalViewButton.addActionListener(event -> onGoalViewClicked());
+        final JButton goalViewButton = UserInterfaceFactory.createButton(
+                "View Goals", event -> onGoalViewClicked());
+        UserInterfaceFactory.styleSecondaryButton(goalViewButton);
         bottomPanel.add(goalViewButton);
 
         // 4. View Transactions Button
-        final JButton viewTransactionsButton = new JButton("View Transactions");
-        viewTransactionsButton.addActionListener(event -> onViewTransactionsClicked());
+        final JButton viewTransactionsButton = UserInterfaceFactory.createButton(
+                "View Transactions", event -> onViewTransactionsClicked());
+        UserInterfaceFactory.styleSecondaryButton(viewTransactionsButton);
         bottomPanel.add(viewTransactionsButton);
 
         return bottomPanel;

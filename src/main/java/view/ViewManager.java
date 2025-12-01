@@ -37,6 +37,11 @@ public class ViewManager implements PropertyChangeListener {
                 final String message = (String) evt.getNewValue();
                 JOptionPane.showMessageDialog(null, message);
                 break;
+
+            default:
+                final String newStates = (String) evt.getNewValue();
+                cardLayout.show(views, newStates);
+                break;
         }
     }
 }
