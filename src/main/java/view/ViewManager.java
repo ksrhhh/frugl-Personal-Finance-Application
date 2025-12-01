@@ -37,6 +37,9 @@ public class ViewManager implements PropertyChangeListener {
                 final String message = (String) evt.getNewValue();
                 JOptionPane.showMessageDialog(null, message);
                 break;
+
+            default:
+                break;
         }
     }
 }

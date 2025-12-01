@@ -178,7 +178,7 @@ public class TransactionsView extends JPanel implements ActionListener, Property
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            ViewTransactionState state = (ViewTransactionState) evt.getNewValue();
+            final ViewTransactionState state = (ViewTransactionState) evt.getNewValue();
             rebuildTiles(state.getMonthlyTransactions());
         }
     }
