@@ -71,12 +71,3 @@ public class ViewTransactionInteractor implements ViewTransactionInputBoundary {
 
 
 
-
-
-
-
-    // convert everthing to string in outputData
-
-
-
-
