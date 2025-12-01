@@ -1,11 +1,12 @@
 package interface_adapter.import_statement;
 
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+
 import interface_adapter.ViewManagerModel;
 import use_case.import_statement.ImportStatementOutputBoundary;
 import use_case.import_statement.ImportStatementOutputData;
 
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 
 /**
  * The Presenter for the Import Bank Statement Use Case.
@@ -13,9 +14,11 @@ import java.time.format.DateTimeFormatter;
 public class ImportStatementPresenter implements ImportStatementOutputBoundary {
 
     private final ViewManagerModel viewManagerModel;
+
     private final ImportStatementViewModel importStatementViewModel;
 
-    public ImportStatementPresenter(ViewManagerModel viewManagerModel, ImportStatementViewModel importStatementViewModel) {
+    public ImportStatementPresenter(ViewManagerModel viewManagerModel,
+                                    ImportStatementViewModel importStatementViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.importStatementViewModel = importStatementViewModel;
     }
