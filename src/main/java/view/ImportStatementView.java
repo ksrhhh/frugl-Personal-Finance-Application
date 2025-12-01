@@ -23,7 +23,6 @@ import interface_adapter.import_statement.ImportStatementViewModel;
  * The Import Bank Statement View.
  */
 public class ImportStatementView extends JPanel implements ActionListener, PropertyChangeListener {
-    private final String viewName = "import statement";
 
     private final ImportStatementViewModel importStatementViewModel;
 
