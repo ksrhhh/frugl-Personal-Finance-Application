@@ -1,13 +1,14 @@
 package charts;
 
-import java.awt.Image;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Renders time chart images from time chart data or returns an IOException if rendering fails.
@@ -36,7 +37,7 @@ public class TimeChartRenderer implements ChartRenderer<ProcessedTimeChartData> 
             final String incomeValues = data.getDataPoints().stream()
                     .map(ProcessedTimeChartData.DataPoint::income)
                     .map(value -> String.format("%.2f", value))
-                    .collect(Collectors.joining(","));
+                    .collect(joining(","));
 
             // Build the expense data strings using Record accessor
             final String expenseValues = data.getDataPoints().stream()
@@ -52,15 +53,12 @@ public class TimeChartRenderer implements ChartRenderer<ProcessedTimeChartData> 
 
             chartConfig = "{\"type\": \"bar\","
                     + "\"data\": {"
-                    + "\"labels\": [" + labels + "],"
-                    + "\"datasets\": ["
+                    + "\"labels\": [" + labels + "], \"datasets\": ["
                     + "{\"label\": \"Income\","
-                    + "\"data\": [" + incomeValues + "],"
-                    + "\"backgroundColor\": \"#4BC0C0\""
+                    + "\"data\": [" + incomeValues + "], \"backgroundColor\": \"#4BC0C0\""
                     + "},{"
                     + "\"label\": \"Expenses\","
-                    + "\"data\": [" + expenseValues + "],"
-                    + "\"backgroundColor\": \"#FF6384\""
+                    + "\"data\": [" + expenseValues + "], \"backgroundColor\": \"#FF6384\""
                     + "}]},"
                     + "\"options\": {\"scales\": {\"yAxes\": [{ \"ticks\": { \"beginAtZero\": true } }]}}}";
         }
