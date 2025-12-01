@@ -2,7 +2,6 @@ package entity;
 
 import java.time.YearMonth;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GoalTree {
 
@@ -82,43 +81,30 @@ public class GoalTree {
     public void setyCoordinate(int newyCoordinate) {
         this.yCoordinate = newyCoordinate;
     }
-
     /**
      * Updates the status of this goal based on a list of transactions.
-     * @param allTransactions the list of all transactions to evaluate against the goal
+     * @param transactions the list of transactions to evaluate against the goal
      */
-    public void updateStatus(List<Transaction> allTransactions) {
+
+    public void updateStatus(List<Transaction> transactions) {
         final YearMonth currentMonth = YearMonth.now();
         final YearMonth goalMonth = goal.getMonth();
-        final float goalAmount = goal.getGoalAmount();
 
-        final List<String> goalCategoryNames = goal.getCategories().stream()
-                .map(Category::getName)
-                .collect(Collectors.toList());
-
-        final double spent = allTransactions.stream()
-                .filter(transaction -> {
-                    final YearMonth transactionMonth = YearMonth.from(transaction.getDate());
-                    final boolean matchesMonth = transactionMonth.equals(goalMonth);
-                    final boolean matchesCategory = goalCategoryNames.contains(transaction.getSource().getName());
-
-                    return matchesMonth && matchesCategory;
-                })
+        final double spent = transactions.stream()
                 .mapToDouble(Transaction::getAmount)
                 .sum();
 
-        if (currentMonth.isAfter(goalMonth) || currentMonth.equals(goalMonth)) {
-            if (spent <= goalAmount) {
-                this.status = "healthy";
-                // Goal achieved
-            }
-            else {
-                this.status = "dead";
-                // Goal failed (overspent)
-            }
-        }
-        else if (currentMonth.isBefore(goalMonth)) {
+        final float goalAmount = goal.getGoalAmount();
+
+        if (currentMonth.isBefore(goalMonth)) {
             this.status = "sapling";
         }
+        else if (spent <= goalAmount) {
+            this.status = "healthy";
+        }
+        else {
+            this.status = "dead";
+        }
     }
+
 }

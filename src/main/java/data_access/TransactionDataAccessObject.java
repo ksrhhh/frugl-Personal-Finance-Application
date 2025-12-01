@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -136,6 +137,27 @@ public class TransactionDataAccessObject implements AutosaveDataAccessInterface,
 
     public List<Transaction> getAll() {
         return new ArrayList<>(transactions);
+    }
+
+    /**
+     * @param categories the list of categories used to filter the transactions
+     * @param month      the month (as a {@code YearMonth}) used to filter the transactions
+     * @return
+     */
+    @Override
+    public List<Transaction> getTransactionsByCategoriesAndMonth(List<Category> categories, YearMonth month) {
+        final List<Transaction> result = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            final boolean categoryMatches = categories.contains(sourceToCategoryMap.get(transaction.getSource()));
+            final boolean monthMatches = YearMonth.from(transaction.getDate()).equals(month);
+
+            if (categoryMatches && monthMatches) {
+                result.add(transaction);
+            }
+        }
+
+        return result;
     }
 
     public List<Transaction> getByDateRange(LocalDate startDate, LocalDate endDate) {
