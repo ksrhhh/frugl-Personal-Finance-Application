@@ -1,14 +1,13 @@
 package charts;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.joining;
+import javax.imageio.ImageIO;
 
 /**
  * Renders time chart images from time chart data or returns an IOException if rendering fails.
@@ -37,7 +36,7 @@ public class TimeChartRenderer implements ChartRenderer<ProcessedTimeChartData> 
             final String incomeValues = data.getDataPoints().stream()
                     .map(ProcessedTimeChartData.DataPoint::income)
                     .map(value -> String.format("%.2f", value))
-                    .collect(joining(","));
+                    .collect(Collectors.joining(","));
 
             // Build the expense data strings using Record accessor
             final String expenseValues = data.getDataPoints().stream()
