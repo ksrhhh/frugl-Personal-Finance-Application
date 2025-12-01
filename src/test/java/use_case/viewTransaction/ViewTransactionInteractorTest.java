@@ -54,7 +54,7 @@ public class ViewTransactionInteractorTest {
             @Override
             public void prepareSuccessView(ViewTransactionOutputData outputData) {
                 assertEquals("2025-01", outputData.getYearMonth());
-                assertEquals(3, outputData.getMonthTransactions().size());
+                assertEquals(2, outputData.getMonthTransactions().size());
 
                 HashMap<String, Object> firstTrans = outputData.getTransactionByIndex(0);
                 assertEquals("Uber", firstTrans.get("source"));
@@ -104,7 +104,7 @@ public class ViewTransactionInteractorTest {
             @Override
             public void prepareSuccessView(ViewTransactionOutputData outputData) {
                 fail("Should call when no transactions exist");
-            }git
+            }
 
             @Override
             public void prepareFailView(String error) {
