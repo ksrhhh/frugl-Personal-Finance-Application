@@ -2,6 +2,8 @@ package app;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -24,9 +26,13 @@ import interface_adapter.import_statement.ImportStatementViewModel;
 import interface_adapter.set_goal.SetGoalController;
 import interface_adapter.set_goal.SetGoalPresenter;
 import interface_adapter.set_goal.SetGoalViewModel;
+import interface_adapter.view_transaction.ViewTransactionController;
+import interface_adapter.view_transaction.ViewTransactionPresenter;
+import interface_adapter.view_transaction.ViewTransactionViewModel;
 import use_case.autosave.AutosaveInputBoundary;
 import use_case.autosave.AutosaveInteractor;
 import use_case.autosave.AutosaveOutputBoundary;
+import use_case.import_statement.GeminiCategorizer;
 import use_case.import_statement.ImportStatementInputBoundary;
 import use_case.import_statement.ImportStatementInteractor;
 import use_case.import_statement.ImportStatementOutputBoundary;
@@ -36,10 +42,14 @@ import use_case.load_dashboard.LoadDashboardOutputBoundary;
 import use_case.set_goal.SetGoalInputBoundary;
 import use_case.set_goal.SetGoalInteractor;
 import use_case.set_goal.SetGoalOutputBoundary;
+import use_case.view_transactions.ViewTransactionInputBoundary;
+import use_case.view_transactions.ViewTransactionInteractor;
+import use_case.view_transactions.ViewTransactionOutputBoundary;
 import view.AutosaveView;
 import view.DashboardView;
 import view.GoalView;
 import view.ImportStatementView;
+import view.TransactionsView;
 import view.ViewManager;
 
 public class AppBuilder {
@@ -69,6 +79,8 @@ public class AppBuilder {
     private DashboardViewModel dashboardViewModel;
 
     private SetGoalController setGoalController;
+    private TransactionsView viewTransactionView; //added
+    private ViewTransactionViewModel viewTransactionViewModel; //added
 
     /**
      * Creates a new builder.
@@ -85,12 +97,12 @@ public class AppBuilder {
     public AppBuilder addAutosaveView() {
         autosaveViewModel = new AutosaveViewModel();
         autosaveView = new AutosaveView(autosaveViewModel);
-        
+
         autosaveView.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, java.awt.Color.GRAY),
                 BorderFactory.createEmptyBorder(BORDER_TOP, BORDER_LEFT, BORDER_BOTTOM, BORDER_RIGHT)
         ));
-        
+
         // it is not added to card panel since it will be added as a status bar in build()
         return this;
     }
@@ -119,7 +131,7 @@ public class AppBuilder {
         importStatementViewModel = new ImportStatementViewModel();
         importStatementView = new ImportStatementView(importStatementViewModel, viewManagerModel);
 
-        cardPanel.add(importStatementView, importStatementView.getViewName());
+        cardPanel.add(importStatementView, importStatementViewModel.getViewName());
         return this;
     }
 
@@ -131,10 +143,12 @@ public class AppBuilder {
     public AppBuilder addImportStatementUseCase() {
         final ImportStatementOutputBoundary importStatementOutputBoundary =
                 new ImportStatementPresenter(viewManagerModel, importStatementViewModel);
+        final GeminiCategorizer geminiCategorizer = new GeminiCategorizer(System.getenv("API_KEY"));
         final ImportStatementInputBoundary importStatementInputBoundary =
-                new ImportStatementInteractor(transactionDataAccessObject, importStatementOutputBoundary);
-        final ImportStatementController importStatementController =
-                new ImportStatementController(importStatementInputBoundary, viewManagerModel);
+                new ImportStatementInteractor(transactionDataAccessObject, importStatementOutputBoundary,
+                        geminiCategorizer);
+        ImportStatementController importStatementController =
+                new ImportStatementController(importStatementInputBoundary);
 
         importStatementView.setImportStatementController(importStatementController);
         return this;
@@ -209,6 +223,42 @@ public class AppBuilder {
         return this.dashboardView;
     }
 
+
+/**
+ * Get TransactionView.
+ * @return TransactionView
+ */
+    public AppBuilder addTransactionsView () {
+        viewTransactionViewModel = new ViewTransactionViewModel();
+        viewTransactionView = new TransactionsView(viewTransactionViewModel);
+        cardPanel.add(viewTransactionView, viewTransactionViewModel.getViewName());
+
+        // WAS: return viewTransactionView;
+        return this; // NOW: returns the builder so you can keep chaining
+    }
+
+    /**
+     * Does transactionViewUseCase.s
+     * @return transactionViewUseCase
+     */
+    public AppBuilder addTransactionViewUseCase () {
+
+        final ViewTransactionOutputBoundary viewTransactionOutputBoundary =
+                new ViewTransactionPresenter(viewManagerModel, viewTransactionViewModel);
+        final ViewTransactionInputBoundary viewTransactionInputBoundary =
+                new ViewTransactionInteractor(transactionDataAccessObject, viewTransactionOutputBoundary);
+        final ViewTransactionController viewTransactionController =
+                new ViewTransactionController(viewTransactionInputBoundary);
+        viewTransactionView.setViewTransactionController(viewTransactionController);
+
+        YearMonth currentYearMonth = YearMonth.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        String formattedYearMonth = currentYearMonth.format(formatter);
+        viewTransactionController.execute(formattedYearMonth);
+        return this;
+
+    }
+
     /**
      * Getter for the SetGoalController.
      *
@@ -229,7 +279,7 @@ public class AppBuilder {
         final JPanel mainPanel = new JPanel(new BorderLayout());
 
         mainPanel.add(cardPanel, BorderLayout.CENTER);
-        
+
         // autosave view is added as a status bar
         if (autosaveView != null) {
             mainPanel.add(autosaveView, BorderLayout.SOUTH);
@@ -241,3 +291,4 @@ public class AppBuilder {
         return application;
     }
 }
+

@@ -5,8 +5,12 @@ import javax.swing.JFrame;
 import interface_adapter.set_goal.SetGoalController;
 import view.DashboardView;
 
-public class Main {
+import view.TransactionsView;
 
+/**
+ * The Main class of the application.
+ */
+public class Main {
     /**
      * Main entry point for the application.
      *
@@ -23,6 +27,8 @@ public class Main {
                 .addImportStatementUseCase()
                 .addSetGoalView()
                 .addGoalUseCase()
+                .addTransactionsView()  //added
+                .addTransactionViewUseCase() //aded
                 .build();
 
         final SetGoalController goalController = appBuilder.getSetGoalController();
