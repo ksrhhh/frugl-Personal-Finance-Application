@@ -1,151 +1,193 @@
 package view;
+import interface_adapter.dashboard.DashboardState;
+import interface_adapter.view_transaction.ViewTransactionController;
+import interface_adapter.view_transaction.ViewTransactionState;
+import interface_adapter.view_transaction.ViewTransactionViewModel;
+import use_case.load_dashboard.TimeRange;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
+import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import interface_adapter.view_transaction.TransactionRowPanel;
-import interface_adapter.view_transaction.ViewTransactionController;
-import interface_adapter.view_transaction.ViewTransactionState;
-import interface_adapter.view_transaction.ViewTransactionViewModel;
-
-/**
- * The View for the Transactions Use Case.
- */
 public class TransactionsView extends JPanel implements ActionListener, PropertyChangeListener {
-    private static final String DEFAULT_MONTH_NUM = "01";
-    private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"};
-    private static final String[] MONTH_NUMBERS = {"01", "02", "03", "04", "05", "06",
-        "07", "08", "09", "10", "11", "12"};
 
+    //initialize all the compoents in CA
     private final String viewName = "view transaction";
     private final ViewTransactionViewModel viewTransactionViewModel;
+
     private ViewTransactionController viewTransactionController;
 
+    //master Frame made up of all JPanel
+    private final JFrame parentFrame;
+
+    //componets for my view
     private final JPanel transactionTilesBlock = new JPanel();
     private JComboBox<String> dropdownMonth;
     private JComboBox<String> dropdownYear;
 
+
+    //dropDown data
+    private final Map<String, String> dropdownMonthLabels = new LinkedHashMap<>(); //searched up online for Reference
     private final String[] dropdownYearList = {"2025", "2024", "2023"};
 
-    public TransactionsView(ViewTransactionViewModel viewTransactionViewModel) {
-        this.viewTransactionViewModel = viewTransactionViewModel;
+
+    public TransactionsView (ViewTransactionViewModel viewTransactionViewModel, JFrame parentFrame) {
+        this.viewTransactionViewModel= viewTransactionViewModel;
+        this.parentFrame = parentFrame;
         this.viewTransactionViewModel.addPropertyChangeListener(this);
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new BorderLayout());
+
+        populateDropDown();
+
         buildContainer();
+
+    }
+
+
+    public void populateDropDown(){
+        // Using LinkedHashMap to preserve insertion order (Jan -> Dec)
+        dropdownMonthLabels.put("January", "01");
+        dropdownMonthLabels.put("February", "02");
+        dropdownMonthLabels.put("March", "03");
+        dropdownMonthLabels.put("April", "04");
+        dropdownMonthLabels.put("May", "05");
+        dropdownMonthLabels.put("June", "06");
+        dropdownMonthLabels.put("July", "07");
+        dropdownMonthLabels.put("August", "08");
+        dropdownMonthLabels.put("September", "09");
+        dropdownMonthLabels.put("October", "10");
+        dropdownMonthLabels.put("November", "11");
+        dropdownMonthLabels.put("December", "12");
     }
 
     /**
-     * We will build the basic default container where total transactions is stored.
+     * We will build the basic default container where total transactions is stored
      */
     private void buildContainer() {
-        final JPanel selectDatePanel = new JPanel();
-        dropdownMonth = new JComboBox<>(MONTHS);
+
+        //Create dropdown
+        JPanel selctDatePanel = new JPanel();
+
+        //fill dropdowns
+        String[] months = dropdownMonthLabels.keySet().toArray(new String[0]);
+        dropdownMonth = new JComboBox<>(months);
         dropdownYear = new JComboBox<>(dropdownYearList);
 
-        final JLabel monthTitle = new JLabel("Month:");
-        final JLabel yearTitle = new JLabel("Year:");
-        final JButton dateButton = new JButton("Okay");
-        dateButton.addActionListener(event -> clickedMonth());
+        JLabel monthTitle = new JLabel("Month:");
+        JLabel yearTitle = new JLabel("Year:");
+        //Creatiing okay buttons
 
-        selectDatePanel.add(yearTitle);
-        selectDatePanel.add(dropdownYear);
-        selectDatePanel.add(monthTitle);
-        selectDatePanel.add(dropdownMonth);
-        selectDatePanel.add(dateButton);
+        JButton dateButton = new JButton("Okay");
+        dateButton.addActionListener(e -> ClickedMonth());
 
-        this.add(selectDatePanel);
+        selctDatePanel.add(yearTitle);
+        selctDatePanel.add(dropdownYear);
+        selctDatePanel.add(monthTitle);
+        selctDatePanel.add(dropdownMonth);
+        selctDatePanel.add(dateButton);
 
-        // Loading the data
+        this.add(selctDatePanel, BorderLayout.NORTH);
+
+
+        //loading the data
         transactionTilesBlock.setLayout(new BoxLayout(transactionTilesBlock, BoxLayout.Y_AXIS));
-        final JScrollPane scrollPane = new JScrollPane(transactionTilesBlock);
+        JScrollPane scrollPane = new JScrollPane(transactionTilesBlock);
 
-        this.add(scrollPane);
+        this.add(scrollPane, BorderLayout.CENTER);
+
     }
 
-    private void rebuildTiles(final List<Map<String, Object>> monthlyTransactions) {
+
+    private void rebuildTiles(List<HashMap<String, Object>> monthlyTransactions) { //monthly transactions
+
         transactionTilesBlock.removeAll();
+
+
 
         if (monthlyTransactions == null || monthlyTransactions.isEmpty()) {
             transactionTilesBlock.add(new JLabel("No transactions found for this month."));
-        }
-        else {
-            final TransactionRowPanel header = new TransactionRowPanel(
-                    "Date", "Source", "Category", "Amount"
-            );
+        } else {
+            // Header
+            JPanel header = new JPanel(new GridLayout(1, 5));
+            header.add(new JLabel("Date"));
+            header.add(new JLabel("Source"));
+            header.add(new JLabel("Category"));
+            header.add(new JLabel("Amount"));
+            header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
             transactionTilesBlock.add(header);
 
             for (int i = 0; i < monthlyTransactions.size(); i++) {
-                final Map<String, Object> transaction = monthlyTransactions.get(i);
-                final TransactionRowPanel row = new TransactionRowPanel(
-                        String.valueOf(transaction.get("date")),
-                        String.valueOf(transaction.get("source")),
-                        String.valueOf(transaction.get("category")),
-                        (String) transaction.get("amount")
-                );
+                HashMap<String, Object> t = monthlyTransactions.get(i);
+                JPanel row = new JPanel(new GridLayout(1, 5));
+                row.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+
+                row.add(new JLabel(String.valueOf(t.get("date"))));
+                row.add(new JLabel(String.valueOf(t.get("source"))));
+                row.add(new JLabel(String.valueOf(t.get("category"))));
+                row.add(new JLabel((String) t.get("amount")));
+                row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
                 transactionTilesBlock.add(row);
             }
         }
 
+
         transactionTilesBlock.revalidate();
         transactionTilesBlock.repaint();
-    }
 
-    private void clickedMonth() {
-        final String selectedMonth = (String) dropdownMonth.getSelectedItem();
-        final String selectedYear = (String) dropdownYear.getSelectedItem();
-        final String monthNumber = getMonthNumber(selectedMonth);
-        final String yearMonthString = selectedYear + "-" + monthNumber;
+
+
+}
+
+
+    private void ClickedMonth() {
+        String selectedMonth = (String) dropdownMonth.getSelectedItem();
+        String selectedYear = (String) dropdownYear.getSelectedItem();
+        String monthNumber = dropdownMonthLabels.get(selectedMonth);
+        String yearMonthString = selectedYear + "-" + monthNumber;
 
         viewTransactionController.execute(yearMonthString);
+
     }
 
     /**
      * React to a button click that results in evt.
      * @param evt the ActionEvent to react to
+     * Class Code**
      */
-    @Override
-    public void actionPerformed(final ActionEvent evt) {
+    public void actionPerformed(ActionEvent evt) {
         System.out.println("Click " + evt.getActionCommand());
     }
 
     @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
+    public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            final ViewTransactionState state = (ViewTransactionState) evt.getNewValue();
+            ViewTransactionState state = (ViewTransactionState) evt.getNewValue();
             if (state.getMonthlyTransactions() != null) {
                 rebuildTiles(state.getMonthlyTransactions());
             }
-        }
-    }
+        }}
 
     public String getViewName() {
         return viewName;
     }
 
-    public void setViewTransactionController(final ViewTransactionController viewTransactionController) {
+    public void setViewTransactionController(ViewTransactionController viewTransactionController) {
         this.viewTransactionController = viewTransactionController;
     }
 
-    private String getMonthNumber(String month) {
-        String result = DEFAULT_MONTH_NUM;
-        for (int i = 0; i < MONTHS.length; i++) {
-            if (MONTHS[i].equals(month)) {
-                result = MONTH_NUMBERS[i];
-                break;
-            }
-        }
-        return result;
-    }
+
 }
+
