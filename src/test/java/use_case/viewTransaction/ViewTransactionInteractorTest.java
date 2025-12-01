@@ -90,7 +90,7 @@ public class ViewTransactionInteractorTest {
             public List<Transaction> getByDateRange(LocalDate start, LocalDate end) {
                 assertEquals(startDate, start);
                 assertEquals(endDate, end);
-                return new ArrayList<>(); // No transactions
+                return new ArrayList<>();
             }
 
             @Override
