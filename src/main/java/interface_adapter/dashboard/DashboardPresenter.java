@@ -11,6 +11,9 @@ import charts.ProcessedTimeChartData;
 import use_case.load_dashboard.LoadDashboardOutputBoundary;
 import use_case.load_dashboard.LoadDashboardOutputData;
 
+/**
+ * Presenter for the Dashboard Use Case.
+ */
 public class DashboardPresenter implements LoadDashboardOutputBoundary {
     private final DashboardViewModel dashboardViewModel;
     private final ChartRenderer<ProcessedPieChartData> pieChartRenderer;

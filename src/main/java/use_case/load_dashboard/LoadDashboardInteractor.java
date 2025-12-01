@@ -14,6 +14,9 @@ import charts.ProcessedTimeChartData;
 import charts.ProcessedTimeChartData.DataPoint;
 import entity.Transaction;
 
+/**
+ * Interactor for the Load Dashboard Use Case.
+ */
 public class LoadDashboardInteractor implements LoadDashboardInputBoundary {
     private final LoadDashboardOutputBoundary presenter;
     private final LoadDashboardDataAccessInterface transactionDataAccessObject;

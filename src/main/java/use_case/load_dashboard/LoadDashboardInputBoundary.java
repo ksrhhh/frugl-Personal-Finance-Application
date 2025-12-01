@@ -2,7 +2,7 @@ package use_case.load_dashboard;
 
 /**
  * Input Boundary for the Load Dashboard use case.
- * This interface defines the input for the interactor.
+ * This  defines the input for the interactor.
  */
 public interface LoadDashboardInputBoundary {
     /**

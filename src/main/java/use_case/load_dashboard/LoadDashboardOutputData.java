@@ -3,6 +3,9 @@ package use_case.load_dashboard;
 import charts.ProcessedPieChartData;
 import charts.ProcessedTimeChartData;
 
+/**
+ * Output Data for the Load Dashboard Use Case.
+ */
 public class LoadDashboardOutputData {
     private final ProcessedTimeChartData timeChartData;
     private final ProcessedPieChartData pieChartData;

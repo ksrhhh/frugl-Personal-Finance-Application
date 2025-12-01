@@ -29,6 +29,9 @@ import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import use_case.load_dashboard.TimeRange;
 
+/**
+ * View for the Dashboard Use Case.
+ */
 public class DashboardView extends JPanel implements PropertyChangeListener {
     private static final int DEFAULT_DAY_RANGE = -30;
     private static final int DEFAULT_GAP = 10;

@@ -2,6 +2,9 @@ package use_case.load_dashboard;
 
 import java.time.LocalDate;
 
+/**
+ * Input Data for the Load Dashboard Use Case.
+ */
 public class LoadDashboardInputData {
     private final LocalDate currentDate;
     private final TimeRange timeRange;

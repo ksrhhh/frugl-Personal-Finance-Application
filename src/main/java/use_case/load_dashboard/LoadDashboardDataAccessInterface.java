@@ -7,6 +7,9 @@ import entity.Category;
 import entity.Source;
 import entity.Transaction;
 
+/**
+ * Data Access Interface for the Load Dashboard Use Case.
+ */
 public interface LoadDashboardDataAccessInterface {
     /**
      * Retrieves a list of transactions within the specified date range.

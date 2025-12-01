@@ -3,6 +3,9 @@ package interface_adapter.dashboard;
 import java.awt.Image;
 import java.util.List;
 
+/**
+ * State for the Dashboard Use Case.
+ */
 public class DashboardState {
     private List<Image> chartImages;
     private String error;

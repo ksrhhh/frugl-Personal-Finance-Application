@@ -6,6 +6,9 @@ import use_case.load_dashboard.LoadDashboardInputBoundary;
 import use_case.load_dashboard.LoadDashboardInputData;
 import use_case.load_dashboard.TimeRange;
 
+/**
+ * Controller for the Dashboard Use Case.
+ */
 public class DashboardController {
     private final LoadDashboardInputBoundary loadDashboardInteractor;
 
