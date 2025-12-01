@@ -3,9 +3,13 @@ package interface_adapter.view_transaction;
 import interface_adapter.ViewManagerModel;
 import use_case.view_transactions.ViewTransactionOutputBoundary;
 import use_case.view_transactions.ViewTransactionOutputData;
+import view.ViewManager;
 
 public class ViewTransactionPresenter implements ViewTransactionOutputBoundary {
+
+
     private final ViewTransactionViewModel viewTransactionViewModel;
+    //private final EditTransactionViewModel viewTransactionViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public ViewTransactionPresenter(ViewManagerModel viewManagerModel,
@@ -19,7 +23,7 @@ public class ViewTransactionPresenter implements ViewTransactionOutputBoundary {
         final ViewTransactionState viewTransactionState = viewTransactionViewModel.getState();
         viewTransactionState.setMonthlyTransactions(result.getMonthTransactions());
         viewTransactionState.setMonth(result.getYearMonth());
-        viewTransactionState.setDataError(null);
+        viewTransactionState.setDataError(null); // Clear any old error
 
         this.viewTransactionViewModel.setState(viewTransactionState);
 
@@ -41,5 +45,6 @@ public class ViewTransactionPresenter implements ViewTransactionOutputBoundary {
 
         viewTransactionViewModel.firePropertyChange();
     }
+
 
 }

@@ -4,29 +4,17 @@ import javax.swing.JFrame;
 
 import view.DashboardView;
 
-import view.TransactionsView;
-
-/**
- * The Main class of the application.
- */
-public class Main {
-
-    /**
-     * Builds and runs the CA architecture application.
-     * @param args unused command line arguments
-
-import view.DashboardView;
-
 public class Main {
 
     /**
      * Main entry point for the application.
      *
      * @param args command line arguments (not used)
+     * @throws Exception exception
      */
     public static void main(String[] args) throws Exception {
-        AppBuilder appBuilder = new AppBuilder();
-        JFrame application = appBuilder
+        final AppBuilder appBuilder = new AppBuilder();
+        final JFrame application = appBuilder
                 .addDashboardView()
                 .addDashboardUseCase()
                 .addAutosaveView()
@@ -35,8 +23,6 @@ public class Main {
                 .addImportStatementUseCase()
                 .addSetGoalView()
                 .addGoalUseCase()
-                .addTransactionsView()
-                .addTransactionViewUseCase()
                 .build();
 
         application.pack();
