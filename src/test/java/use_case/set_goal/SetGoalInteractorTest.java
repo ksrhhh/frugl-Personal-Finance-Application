@@ -16,6 +16,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SetGoalInteractorTest {
 
+    @Test
+    void testOutputDataGetters() {
+        Goal g = new Goal(YearMonth.of(2025, 1), List.of(new Category("Test")), 300);
+        List<GoalTree> forest = List.of(new GoalTree(g, 0, 0));
+
+        SetGoalOutputData data = new SetGoalOutputData(g, forest, true, "OK");
+
+        assertEquals(g, data.getGoal());
+        assertEquals(forest, data.getForest());
+        assertTrue(data.isSuccess());
+        assertEquals("OK", data.getMessage());
+        assertNotNull(data.getTimestamp());
+    }
+
     // ---------------------------------------------------------
     // Mock Repositories
     // ---------------------------------------------------------
@@ -71,9 +85,81 @@ class SetGoalInteractorTest {
         }
     }
 
-    // ---------------------------------------------------------
-    // Tests
-    // ---------------------------------------------------------
+
+    @Test
+    void testOverwriteExistingGoal() throws IOException {
+        InMemoryGoalRepo repo = new InMemoryGoalRepo();
+        ForestDataAccessInterface txRepo = new InMemoryTransactionRepo(List.of(), Map.of());
+
+        Category food = new Category("Food");
+        YearMonth m = YearMonth.of(2025, 1);
+
+        // First save
+        Goal g1 = new Goal(m, List.of(food), 100);
+        repo.saveGoal(g1);
+
+        // New input with SAME month + categories but different amount
+        SetGoalInputData input = new SetGoalInputData(m, 300, List.of(food));
+
+        SetGoalOutputBoundary presenter = new SetGoalOutputBoundary() {
+            @Override public void prepareSuccessView(SetGoalOutputData d) {
+                assertEquals(300, d.getGoal().getGoalAmount());
+            }
+            @Override public void prepareFailView(String e) { fail(); }
+        };
+
+        new SetGoalInteractor(repo, txRepo, presenter).execute(input);
+
+        // Ensure repo contains only the updated goal
+        assertEquals(1, repo.getAll().size());
+        assertEquals(300, repo.getAll().get(0).getGoalAmount());
+    }
+
+    @Test
+    void testTransactionGetAllRuntimeException() {
+        SetGoalDataAccessInterface goalRepo = new SetGoalDataAccessInterface() {
+            @Override public void saveGoal(Goal g) {}
+            @Override public List<Goal> getAll() {
+                return List.of(new Goal(
+                        YearMonth.of(2025, 1),
+                        List.of(new Category("Food")),
+                        100
+                ));
+            }
+        };
+
+        ForestDataAccessInterface txRepo = new ForestDataAccessInterface() {
+            @Override
+            public List<Transaction> getAll() {
+                throw new RuntimeException("TX RUNTIME FAIL");
+            }
+
+            @Override
+            public List<Transaction> getTransactionsByCategoriesAndMonth(List<Category> c, YearMonth m) {
+                return List.of();
+            }
+        };
+
+        SetGoalInputData input = new SetGoalInputData(
+                YearMonth.of(2025, 1),
+                100,
+                List.of(new Category("Food"))
+        );
+
+        final boolean[] hit = {false};
+
+        SetGoalOutputBoundary presenter = new SetGoalOutputBoundary() {
+            @Override public void prepareSuccessView(SetGoalOutputData d) { fail(); }
+            @Override public void prepareFailView(String e) {
+                hit[0] = true;
+                assertTrue(e.contains("TX RUNTIME FAIL"));
+            }
+        };
+
+        new SetGoalInteractor(goalRepo, txRepo, presenter).execute(input);
+
+        assertTrue(hit[0], "RuntimeException branch was not hit");
+    }
 
     @Test
     void testSuccess() {
@@ -93,6 +179,7 @@ class SetGoalInteractorTest {
                 assertEquals("Goal successfully saved.", data.getMessage());
                 assertEquals(400, data.getGoal().getGoalAmount());
                 assertEquals(1, data.getForest().size());
+                assertNotNull(data.getTimestamp());
             }
             @Override
             public void prepareFailView(String error) {
@@ -157,9 +244,7 @@ class SetGoalInteractorTest {
     void testSaveGoalIOException() {
         SetGoalDataAccessInterface repo = new SetGoalDataAccessInterface() {
             @Override
-            public void saveGoal(Goal g) throws IOException {
-                throw new IOException("DB broken");
-            }
+            public void saveGoal(Goal g) throws IOException { throw new IOException("DB broken"); }
             @Override
             public List<Goal> getAll() { return List.of(); }
         };
@@ -221,11 +306,9 @@ class SetGoalInteractorTest {
         interactor.execute(new SetGoalInputData(month, 150, List.of(rent)));  // dead
         interactor.execute(new SetGoalInputData(future, 200, List.of(food))); // sapling
 
-        // Manual recomputation to test correctness
         List<GoalTree> forest = new ArrayList<>();
         for (Goal g : repo.getAll()) {
-            List<Transaction> filtered =
-                    txRepo.getTransactionsByCategoriesAndMonth(g.getCategories(), g.getMonth());
+            List<Transaction> filtered = txRepo.getTransactionsByCategoriesAndMonth(g.getCategories(), g.getMonth());
             GoalTree t = new GoalTree(g, 0, 0);
             t.updateStatus(filtered);
             forest.add(t);
@@ -242,7 +325,7 @@ class SetGoalInteractorTest {
         Goal g = new Goal(YearMonth.of(2026, 1), List.of(c), 500);
 
         InMemoryGoalRepo repo = new InMemoryGoalRepo();
-        repo.goals.add(g);
+        try { repo.saveGoal(g); } catch (IOException e) { fail(); }
 
         ForestDataAccessInterface txRepo = new InMemoryTransactionRepo(List.of(), Map.of());
 
@@ -250,8 +333,10 @@ class SetGoalInteractorTest {
             @Override
             public void prepareSuccessView(SetGoalOutputData data) {
                 assertEquals(1, data.getForest().size());
-                assertNull(data.getGoal()); // loadForest passes null
-                assertFalse(data.isSuccess()); // message = null
+                assertNull(data.getGoal());
+                assertFalse(data.isSuccess()); // success flag is false in loadForest
+                assertNull(data.getMessage()); // covers message=null branch
+                assertNotNull(data.getTimestamp());
             }
             @Override
             public void prepareFailView(String error) {
@@ -265,13 +350,8 @@ class SetGoalInteractorTest {
     @Test
     void testLoadForestIOException() {
         SetGoalDataAccessInterface repo = new SetGoalDataAccessInterface() {
-            @Override
-            public void saveGoal(Goal goal) {}
-
-            @Override
-            public List<Goal> getAll() throws IOException {
-                throw new IOException("Load fail");
-            }
+            @Override public void saveGoal(Goal goal) {}
+            @Override public List<Goal> getAll() throws IOException { throw new IOException("Load fail"); }
         };
 
         ForestDataAccessInterface txRepo = new InMemoryTransactionRepo(List.of(), Map.of());
@@ -284,5 +364,94 @@ class SetGoalInteractorTest {
         };
 
         new SetGoalInteractor(repo, txRepo, presenter).loadForest();
+    }
+
+    @Test
+    void testLoadAndPresentForestWithSuccessMessage() throws IOException {
+        // Prepare a goal and repo
+        Goal g = new Goal(YearMonth.of(2025, 11), List.of(new Category("Test")), 100);
+
+        SetGoalDataAccessInterface repo = new InMemoryGoalRepo();
+        repo.saveGoal(g);  // save a goal so loadAndPresentForest has something to process
+
+        ForestDataAccessInterface txRepo = new InMemoryTransactionRepo(List.of(), Map.of());
+
+        final boolean[] successCalled = {false};
+
+        SetGoalOutputBoundary presenter = new SetGoalOutputBoundary() {
+            @Override
+            public void prepareSuccessView(SetGoalOutputData data) {
+                successCalled[0] = true;
+                assertEquals(g, data.getGoal());
+                assertFalse(data.getForest().isEmpty());
+                assertTrue(data.isSuccess());            // successMessage != null branch
+                assertEquals("Custom success message", data.getMessage());
+            }
+
+            @Override
+            public void prepareFailView(String error) {
+                fail("Should not fail");
+            }
+        };
+
+        SetGoalInteractor interactor = new SetGoalInteractor(repo, txRepo, presenter);
+
+        // Directly call the private method using reflection
+        try {
+            var method = SetGoalInteractor.class.getDeclaredMethod("loadAndPresentForest", Goal.class, String.class);
+            method.setAccessible(true);
+            method.invoke(interactor, g, "Custom success message"); // non-null message
+        } catch (Exception e) {
+            fail(e);
+        }
+
+        assertTrue(successCalled[0], "prepareSuccessView was not called");
+    }
+
+    @Test
+    void testLoadForestEmpty() {
+        // Hits the branch where the loop in loadAndPresentForest is skipped entirely
+        SetGoalDataAccessInterface repo = new InMemoryGoalRepo();
+        ForestDataAccessInterface txRepo = new InMemoryTransactionRepo(List.of(), Map.of());
+
+        SetGoalOutputBoundary presenter = new SetGoalOutputBoundary() {
+            @Override
+            public void prepareSuccessView(SetGoalOutputData data) {
+                assertTrue(data.getForest().isEmpty());
+                assertNull(data.getGoal());
+                assertFalse(data.isSuccess());
+            }
+            @Override
+            public void prepareFailView(String error) { fail(); }
+        };
+
+        new SetGoalInteractor(repo, txRepo, presenter).loadForest();
+    }
+
+    @Test
+    void testExecuteWithEmptyRepo() {
+        // Hits the branch inside execute() where the loop over allGoals is skipped.
+        // This requires mocking getAll() to return empty even after saveGoal is called.
+        SetGoalDataAccessInterface repo = new SetGoalDataAccessInterface() {
+            @Override public void saveGoal(Goal g) {}
+            @Override public List<Goal> getAll() { return List.of(); } // Empty list
+        };
+
+        ForestDataAccessInterface txRepo = new InMemoryTransactionRepo(List.of(), Map.of());
+
+        SetGoalInputData input = new SetGoalInputData(YearMonth.of(2025, 1), 100, List.of(new Category("Cat")));
+
+        SetGoalOutputBoundary presenter = new SetGoalOutputBoundary() {
+            @Override
+            public void prepareSuccessView(SetGoalOutputData data) {
+                assertTrue(data.getForest().isEmpty());
+                assertEquals(100, data.getGoal().getGoalAmount());
+                assertTrue(data.isSuccess());
+            }
+            @Override
+            public void prepareFailView(String error) { fail(); }
+        };
+
+        new SetGoalInteractor(repo, txRepo, presenter).execute(input);
     }
 }

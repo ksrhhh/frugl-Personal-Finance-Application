@@ -68,7 +68,11 @@ public class SetGoalInteractor implements SetGoalInputBoundary {
                 presenter.prepareSuccessView(new SetGoalOutputData(goal, forest, true, "Goal successfully saved."));
             }
             catch (IOException error) {
-                presenter.prepareFailView("An error occurred while saving goal: " + error.getMessage());
+                presenter.prepareFailView(error.getMessage());
+            }
+            catch (RuntimeException error) {
+                // repository interface methods may throw runtime exceptions
+                presenter.prepareFailView(error.getMessage());
             }
         }
 
