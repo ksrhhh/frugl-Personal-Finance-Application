@@ -35,8 +35,8 @@ public class Main {
                 .addImportStatementUseCase()
                 .addSetGoalView()
                 .addGoalUseCase()
-                .addTransactionsView()
-                .addTransactionViewUseCase()
+                .addTransactionsView() /// q
+                .addTransactionViewUseCase() /// q
                 .build();
 
         application.pack();

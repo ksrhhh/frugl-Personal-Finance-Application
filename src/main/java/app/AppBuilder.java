@@ -2,6 +2,8 @@ package app;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -244,10 +246,14 @@ public class AppBuilder {
                 new ViewTransactionController(viewTransactionInputBoundary);
         viewTransactionView.setViewTransactionController(viewTransactionController);
 
-        viewTransactionController.execute("2025-11");
+        YearMonth currentYearMonth = YearMonth.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        String formattedYearMonth = currentYearMonth.format(formatter);
+        viewTransactionController.execute(formattedYearMonth);
         return this;
 
     }
+
     /**
      * Builds the application frame, shows the initial view, and returns it.
      *
