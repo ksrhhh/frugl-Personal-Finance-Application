@@ -16,7 +16,6 @@ import java.util.ArrayList; // NEW: For Table Model
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane; // NEW: For table scrolling
@@ -24,18 +23,18 @@ import javax.swing.JTable; // NEW: For displaying data
 import javax.swing.table.AbstractTableModel; // NEW: Base class for table data
 
 import entity.GoalTree;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.set_goal.SetGoalController;
 import interface_adapter.set_goal.SetGoalState;
 import interface_adapter.set_goal.SetGoalViewModel;
 
 public class GoalView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private static final int TITLE_FONT_SIZE = 24;
     private static final Color FOREST_BACKGROUND_COLOR = new Color(191, 246, 191);
-    private static final int VERTICAL_STRUT = 10;
 
-    private final SetGoalViewModel viewModel;
-    private SetGoalController controller;
+    private final transient SetGoalViewModel viewModel;
+    private transient SetGoalController controller;
 
     private final ForestPanel forestPanel;
     private final JButton setGoalButton;
@@ -46,13 +45,13 @@ public class GoalView extends JPanel implements ActionListener, PropertyChangeLi
     // ------------------------
 
     public GoalView(SetGoalViewModel viewModel) {
+    public GoalView(SetGoalViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;
         this.viewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BorderLayout());
 
-        final JLabel title = UserInterfaceFactory.createTitleLabel(SetGoalState.TITLE_LABEL, TITLE_FONT_SIZE);
-        this.add(title, BorderLayout.NORTH);
+        this.add(UserInterfaceFactory.createHeader(SetGoalState.TITLE_LABEL), BorderLayout.NORTH);
 
         forestPanel = new ForestPanel();
         this.add(forestPanel, BorderLayout.CENTER);
@@ -67,8 +66,17 @@ public class GoalView extends JPanel implements ActionListener, PropertyChangeLi
         // ---------------------------------
 
         setGoalButton = UserInterfaceFactory.createButton(SetGoalState.SET_GOAL_BUTTON_LABEL, this);
+        UserInterfaceFactory.stylePrimaryButton(setGoalButton);
         final JPanel buttonPanel = new JPanel();
         buttonPanel.add(setGoalButton);
+
+        final JButton backButton = UserInterfaceFactory.createButton("Back", evt -> {
+            viewManagerModel.setState(DashboardViewModel.VIEW_NAME);
+            viewManagerModel.firePropertyChange();
+        });
+        UserInterfaceFactory.styleSecondaryButton(backButton);
+        buttonPanel.add(backButton);
+
         this.add(buttonPanel, BorderLayout.SOUTH);
     }
 
@@ -106,9 +114,9 @@ public class GoalView extends JPanel implements ActionListener, PropertyChangeLi
 
     // Inner class for rendering the forest
     private class ForestPanel extends JPanel {
-        private BufferedImage saplingImage;
-        private BufferedImage healthyImage;
-        private BufferedImage deadImage;
+        private transient BufferedImage saplingImage;
+        private transient BufferedImage healthyImage;
+        private transient BufferedImage deadImage;
 
         ForestPanel() {
             this.setBackground(FOREST_BACKGROUND_COLOR);

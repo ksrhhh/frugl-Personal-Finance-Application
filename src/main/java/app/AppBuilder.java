@@ -79,8 +79,10 @@ public class AppBuilder {
     private DashboardViewModel dashboardViewModel;
 
     private SetGoalController setGoalController;
-    private TransactionsView viewTransactionView; //added
-    private ViewTransactionViewModel viewTransactionViewModel; //added
+    private TransactionsView viewTransactionView;
+    private ViewTransactionViewModel viewTransactionViewModel;
+    private TransactionsView viewTransactionView;
+    private ViewTransactionViewModel viewTransactionViewModel;
 
     /**
      * Creates a new builder.
@@ -143,11 +145,11 @@ public class AppBuilder {
     public AppBuilder addImportStatementUseCase() {
         final ImportStatementOutputBoundary importStatementOutputBoundary =
                 new ImportStatementPresenter(viewManagerModel, importStatementViewModel);
-        final GeminiCategorizer geminiCategorizer = new GeminiCategorizer(System.getenv("API_KEY"));
+        final GeminiCategorizer geminiCategorizer = new GeminiCategorizer(System.getenv("GEMINI_API_KEY"));
         final ImportStatementInputBoundary importStatementInputBoundary =
                 new ImportStatementInteractor(transactionDataAccessObject, importStatementOutputBoundary,
                         geminiCategorizer);
-        ImportStatementController importStatementController =
+        final ImportStatementController importStatementController =
                 new ImportStatementController(importStatementInputBoundary);
 
         importStatementView.setImportStatementController(importStatementController);
@@ -161,7 +163,7 @@ public class AppBuilder {
      */
     public AppBuilder addSetGoalView() {
         setGoalViewModel = new SetGoalViewModel();
-        goalView = new GoalView(setGoalViewModel);
+        goalView = new GoalView(setGoalViewModel, viewManagerModel);
 
         cardPanel.add(goalView, setGoalViewModel.getViewName());
         return this;
@@ -223,25 +225,23 @@ public class AppBuilder {
         return this.dashboardView;
     }
 
-
-/**
- * Get TransactionView.
- * @return TransactionView
- */
-    public AppBuilder addTransactionsView () {
+    /**
+     * Get TransactionView.
+     * @return TransactionView
+     */
+    public AppBuilder addTransactionsView() {
         viewTransactionViewModel = new ViewTransactionViewModel();
-        viewTransactionView = new TransactionsView(viewTransactionViewModel);
+        viewTransactionView = new TransactionsView(viewTransactionViewModel, viewManagerModel);
         cardPanel.add(viewTransactionView, viewTransactionViewModel.getViewName());
 
-        // WAS: return viewTransactionView;
-        return this; // NOW: returns the builder so you can keep chaining
+        return this;
     }
 
     /**
-     * Does transactionViewUseCase.s
+     * Does transactionViewUseCases.
      * @return transactionViewUseCase
      */
-    public AppBuilder addTransactionViewUseCase () {
+    public AppBuilder addTransactionViewUseCase() {
 
         final ViewTransactionOutputBoundary viewTransactionOutputBoundary =
                 new ViewTransactionPresenter(viewManagerModel, viewTransactionViewModel);
@@ -251,9 +251,9 @@ public class AppBuilder {
                 new ViewTransactionController(viewTransactionInputBoundary);
         viewTransactionView.setViewTransactionController(viewTransactionController);
 
-        YearMonth currentYearMonth = YearMonth.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-        String formattedYearMonth = currentYearMonth.format(formatter);
+        final YearMonth currentYearMonth = YearMonth.now();
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        final String formattedYearMonth = currentYearMonth.format(formatter);
         viewTransactionController.execute(formattedYearMonth);
         return this;
 
@@ -275,7 +275,7 @@ public class AppBuilder {
      * @return a JFrame application frame ready to display
      */
     public JFrame build() {
-        JFrame application = new JFrame("frugl");
+        final JFrame application = new JFrame("frugl");
         final JPanel mainPanel = new JPanel(new BorderLayout());
 
         mainPanel.add(cardPanel, BorderLayout.CENTER);
