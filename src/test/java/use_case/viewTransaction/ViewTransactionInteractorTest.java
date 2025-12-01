@@ -104,7 +104,7 @@ public class ViewTransactionInteractorTest {
             @Override
             public void prepareSuccessView(ViewTransactionOutputData outputData) {
                 fail("Should call when no transactions exist");
-            }
+            }git
 
             @Override
             public void prepareFailView(String error) {
