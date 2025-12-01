@@ -26,6 +26,9 @@ import interface_adapter.import_statement.ImportStatementViewModel;
 import interface_adapter.set_goal.SetGoalController;
 import interface_adapter.set_goal.SetGoalPresenter;
 import interface_adapter.set_goal.SetGoalViewModel;
+import interface_adapter.view_transaction.ViewTransactionController;
+import interface_adapter.view_transaction.ViewTransactionPresenter;
+import interface_adapter.view_transaction.ViewTransactionViewModel;
 import use_case.autosave.AutosaveInputBoundary;
 import use_case.autosave.AutosaveInteractor;
 import use_case.autosave.AutosaveOutputBoundary;
@@ -38,10 +41,14 @@ import use_case.load_dashboard.LoadDashboardOutputBoundary;
 import use_case.set_goal.SetGoalInputBoundary;
 import use_case.set_goal.SetGoalInteractor;
 import use_case.set_goal.SetGoalOutputBoundary;
+import use_case.view_transactions.ViewTransactionInputBoundary;
+import use_case.view_transactions.ViewTransactionInteractor;
+import use_case.view_transactions.ViewTransactionOutputBoundary;
 import view.AutosaveView;
 import view.DashboardView;
 import view.GoalView;
 import view.ImportStatementView;
+import view.TransactionsView;
 import view.ViewManager;
 
 public class AppBuilder {
@@ -69,6 +76,9 @@ public class AppBuilder {
 
     private DashboardView dashboardView;
     private DashboardViewModel dashboardViewModel;
+
+    private TransactionsView viewTransactionView; //added
+    private ViewTransactionViewModel viewTransactionViewModel; //added
 
     /**
      * Creates a new builder.
@@ -250,7 +260,7 @@ public class AppBuilder {
      * @return a JFrame application frame ready to display
      */
     public JFrame build() {
-        final JFrame application = new JFrame("frugl");
+        JFrame application = new JFrame("frugl");
         final JPanel mainPanel = new JPanel(new BorderLayout());
 
         mainPanel.add(cardPanel, BorderLayout.CENTER);
@@ -266,3 +276,4 @@ public class AppBuilder {
         return application;
     }
 }
+
