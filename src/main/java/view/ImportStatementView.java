@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -27,13 +26,10 @@ import interface_adapter.import_statement.ImportStatementViewModel;
  */
 public class ImportStatementView extends JPanel implements ActionListener, PropertyChangeListener {
     private static final int BORDER_PADDING = 15;
-    private static final int TITLE_FONT_SIZE = 16;
     private static final int PATH_FIELD_COLUMNS = 20;
     private static final int HORIZONTAL_GAP = 10;
     private static final int VERTICAL_GAP_LARGE = 15;
     private static final int VERTICAL_GAP_SMALL = 10;
-
-    private final String viewName = "import statement";
 
     private final ImportStatementViewModel importStatementViewModel;
 
@@ -58,27 +54,32 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
         this.setBorder(BorderFactory.createEmptyBorder(
                 BORDER_PADDING, BORDER_PADDING, BORDER_PADDING, BORDER_PADDING));
 
-        final JLabel title = new JLabel("Import Bank Statement");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font("Arial", Font.BOLD, TITLE_FONT_SIZE));
+        final JPanel header = UserInterfaceFactory.createHeader("Import Statement");
+        header.setAlignmentX(Component.CENTER_ALIGNMENT);
+        header.setMaximumSize(header.getPreferredSize());
+        this.add(header);
+        this.add(Box.createRigidArea(new Dimension(0, VERTICAL_GAP_LARGE)));
 
         filePathField = new JTextField(PATH_FIELD_COLUMNS);
         filePathField.setEditable(false);
 
-        browseButton = new JButton("Browse");
-        browseButton.addActionListener(this);
+        browseButton = UserInterfaceFactory.createButton("Browse", this);
+        UserInterfaceFactory.styleSecondaryButton(browseButton);
 
-        importButton = new JButton("Import");
+        importButton = UserInterfaceFactory.createButton("Import", this);
+        UserInterfaceFactory.stylePrimaryButton(importButton);
         importButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        importButton.addActionListener(this);
+        importButton.setMaximumSize(importButton.getPreferredSize());
 
-        backButton = new JButton("Back");
+        backButton = UserInterfaceFactory.createButton("Back", this);
+        UserInterfaceFactory.styleSecondaryButton(backButton);
         backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        backButton.addActionListener(this);
+        backButton.setMaximumSize(backButton.getPreferredSize());
 
         final JPanel pathPanel = createPathPanel();
+        pathPanel.setMaximumSize(pathPanel.getPreferredSize());
 
-        addComponents(title, pathPanel);
+        addComponents(pathPanel);
     }
 
     private JPanel createPathPanel() {
@@ -96,9 +97,7 @@ public class ImportStatementView extends JPanel implements ActionListener, Prope
         return pathPanel;
     }
 
-    private void addComponents(JLabel title, JPanel pathPanel) {
-        this.add(title);
-        this.add(Box.createRigidArea(new Dimension(0, VERTICAL_GAP_LARGE)));
+    private void addComponents(JPanel pathPanel) {
         this.add(pathPanel);
         this.add(Box.createRigidArea(new Dimension(0, VERTICAL_GAP_LARGE)));
         this.add(importButton);
