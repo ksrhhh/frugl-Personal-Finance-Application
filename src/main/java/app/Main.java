@@ -1,5 +1,7 @@
 package app;
 
+import java.awt.Frame;
+
 import javax.swing.JFrame;
 
 import interface_adapter.set_goal.SetGoalController;
@@ -15,7 +17,7 @@ public class Main {
      * @param args command line arguments (not used)
      * @throws Exception if an error occurs during application initialization
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         final AppBuilder appBuilder = new AppBuilder();
         final JFrame application = appBuilder
                 .addDashboardView()
@@ -30,18 +32,18 @@ public class Main {
                 .addTransactionViewUseCase()
                 .build();
 
-        final SetGoalController goalController = appBuilder.getSetGoalController();
-        if (goalController != null) {
-            goalController.loadForest();
-        }
-
-        application.pack();
+        application.setExtendedState(Frame.MAXIMIZED_BOTH);
         application.setLocationRelativeTo(null);
         application.setVisible(true);
 
         final DashboardView dashboardView = appBuilder.getDashboardView();
         if (dashboardView != null) {
             dashboardView.loadInitialData();
+        }
+
+        final SetGoalController goalController = appBuilder.getSetGoalController();
+        if (goalController != null) {
+            goalController.loadForest();
         }
     }
 }
