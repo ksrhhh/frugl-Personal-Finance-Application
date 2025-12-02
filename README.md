@@ -26,22 +26,20 @@ Our application is built on Clean Architecture and SOLID principles, with excell
 
 ## API and Data Used
 
-API link:
-API Usage: Categorizing bank statements into categories
- Income, Rent & Utilities, Transportation, Food & Dining, Shopping, Entertainment, Other
-Instructions:
-Instructions (Setting API key in env) 
- GEMINI_API_KEY=your_api_token
+- API link:
+- API Usage: Categorizing bank statements into categories
+- Income, Rent & Utilities, Transportation, Food & Dining, Shopping, Entertainment, Other
+- Instructions:
+- GEMINI_API_KEY=your_api_token
 
 ### Charts.io API
-API Link: https://quickchart.io/chart?c=_{your chart here}_
-API Usage: Visualizing financial data by spending category (pie chart) and by inflow and outlow over time (time chart)
-Instructions: _KOSAR TO ADD_
+- API Link: https://quickchart.io/chart?c=_{your_chart_here}
+- API Usage: Visualizing financial data by spending category (pie chart) and by inflow and outlow over time (time chart)
 
 ### JSON data
-Transactions.json
-Source_Categories.json
-Goals.json
+- transactions.json
+- source_Categories.json
+- goals.json
 
 ## Screenshots
 
