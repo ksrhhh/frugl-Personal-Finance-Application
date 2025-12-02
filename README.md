@@ -41,8 +41,17 @@ API Usage: Visualizing bank transactions data by category and bar charts to see 
 Transactions.json
 Source_categories.json
 goal.json
-(Explain here how the data is saved in the app, and the DAO saves the data.)
 
 ## Screenshots
-![Alt text for image](data:image/png;base64,{base64_string_of_image_data})
 
+<img src="screenshots/import.png" alt="import.png image" style="width:50%;">
+
+<img src="screenshots/transaction.png" alt="transaction.png image" style="width:50%;">
+
+<img src="screenshots/dashboard.png" alt="dashboard.png image" style="width:50%;">
+
+<img src="screenshots/tree.png" alt="tree.png image" style="width:75%;">
+
+<img src="screenshots/autosave.png" alt="autosave.png image" style="width:50%;">
+
+<img src="screenshots/checkStyle.png" alt="checkStyle.png image" style="width:50%;">
