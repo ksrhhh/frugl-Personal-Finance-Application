@@ -139,9 +139,6 @@ public class ImportStatementInteractor implements ImportStatementInputBoundary {
     private void categorizeSources(List<JsonObject> uncategorized) throws ImportStatementException {
         final Set<String> uniqueSourceNames = new HashSet<>();
         for (JsonObject tx : uncategorized) {
-            if (!tx.has(FIELD_SOURCE)) {
-                throw new ImportStatementException(ERROR_CATEGORIZE_TRANSACTIONS);
-            }
             uniqueSourceNames.add(tx.get(FIELD_SOURCE).getAsString());
         }
         if (!uniqueSourceNames.isEmpty()) {
