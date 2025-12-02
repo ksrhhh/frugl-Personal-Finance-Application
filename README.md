@@ -43,7 +43,6 @@ API Usage: Categorizing bank statements into categories Income, Rent & Utilities
 Instructions:
 - GEMINI_API_KEY=your_api_token
 
-### Charts.io API
 ### QuickChart.io API
 API Link: https://quickchart.io/chart?c= _{your chart here}_
 
@@ -63,14 +62,20 @@ The JSON strings are URL-encoded and appended to the API base URL. The applicati
 
 ## App Feature Visualizations
 
+### Import Bank Statement
 <img src="screenshots/import.png" alt="import.png image" style="width:50%;">
 
+### View Transactions
 <img src="screenshots/transaction.png" alt="transaction.png image" style="width:50%;">
 
+### Load Dashboard 
 <img src="screenshots/dashboard.png" alt="dashboard.png image" style="width:50%;">
 
+### Goal Trees
 <img src="screenshots/tree.png" alt="tree.png image" style="width:50%;">
 
+### Autosave
 <img src="screenshots/autosave.png" alt="autosave.png image" style="width:25%;">
 
+### Testing & Checkstyle
 <img src="screenshots/checkStyle.png" alt="checkStyle.png image" style="width:50%;">
