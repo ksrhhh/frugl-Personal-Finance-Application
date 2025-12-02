@@ -10,7 +10,7 @@ Frugl is a swing-based Personal Financial Management application that transforms
 The user navigates our app from the main dashboard, where they can import bank statements from their local files and select a date range to visualize a breakdown of spending, inflows, and outflows. The user can also view monthly individual transactions and set goals using an interactive “financial forest,” where each goal creates a tree in their goal forest.
 
 ### Structure of the app
-Our application is built on Clean Architecture and SOLID principles, with excellent Code Quality. Thus, our front-end UI elements operate independently of our core back-end logic, improving maintainability and collaboration. Our app runs locally, processes bank statements from JSON files using Gemini, and displays colourful charts via Charts.io.
+Our application is built on Clean Architecture and SOLID principles, with excellent Code Quality. Thus, our front-end UI elements operate independently of our core back-end logic, improving maintainability and collaboration. Our app runs locally, processes bank statements from JSON files using Gemini, and displays colourful charts via QuickChart.io.
 
 ## User stories
 
@@ -20,7 +20,7 @@ Our application is built on Clean Architecture and SOLID principles, with excell
 | 2  | View Transaction | As a user, I want to view my list of organized transactions by month to review my particular monthly transactions. | Yunji Hwang |
 | 3  | Load Dashboard (Pie Chart) | As a user, I want to view a visual breakdown of my spending by category for a selected month so that I can understand my spending habits. | Kosar Hemmati |
 | 4 | Load Dashboard (Time Chart) | As a user, I want to view a monthly summary of my income and expenses over time so that I can identify my financial trends. | Kosar Hemmati |
-| 5 | Goal Trees| As a user, I want to set monthly spending goals by category and track my progress through interactive visualizations so that I can manage my budget more effectively. | Kerem Berk Bozkurt |
+| 5 | Goal Trees| As a user, I want to set monthly spending goals by category and track my progress through interactive visualizations so that I can manage my budget more effectively and stay motivated to save. | Kerem Berk Bozkurt |
 | 6 | Autosaving | As a user, I want my transaction and goal data to be automatically saved periodically in the background so that I don't lose my work if the application crashes or I forget to manually save. | Raihaan Sandhu |
 
 
@@ -41,7 +41,7 @@ Instructions: _KOSAR TO ADD_
 ### JSON data
 Transactions.json
 Source_categories.json
-goal.json
+goals.json
 
 ## Screenshots
 
