@@ -76,10 +76,10 @@ The application utilizes the QuickChart.io API to render financial visualization
 
 * **Image Rendering:** The application then fetches the generated image directly as an input stream (`ImageIO.read`) to display in the dashboard without saving local files.
 
-### JSON Data
-- transactions.json
-- source_categories.json
-- goals.json
+### Data Persistence
+- Used `transactions.json` to store a list of transactions, along with their associate date and vendor. 
+- Used `source_categories.json` to store a associative map between a vendor source and their category.
+- Used `goals.json` to store a list of goals
 
 ## App Feature Visualizations
 
