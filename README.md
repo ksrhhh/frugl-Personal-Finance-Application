@@ -16,26 +16,27 @@ Our application is built on Clean Architecture and SOLID principles, with excell
 
 | #  | User Story  | Description | Developer |
 | :- | :-----------| :--------- | :-----: |
-| 1  | ImportStatments| As a user, I want to import my bank statements in JSON format so that the app can automatically categorize my transactions. |Parsa Nabifar|
-| 2  | View Transaction | As a user, I want to view my list of organized transactions by month to review my particular monthly transactions.| Yunji Hwang |
-| 3  | Load Dashboard | As a user, I want to view a visual breakdown of my spending by category for a selected month so that I can understand my spending habits. | Kosar Hemmati |
-| 4 | Cash Flow | As a user, I want to view a monthly summary of my income and expenses over time so that I can identify my financial trends. | Kosar Hemmati |
-| 5 | Goal Trees|As a user, I want to set monthly spending goals by category and track my progress through interactive visualizations so that I can manage my budget more effectively. |Kerem Berk Bozkurt|
-| 6 | Autosaving |As a user, I want my transaction and goal data to be automatically saved periodically in the background so that I don't lose my work if the application crashes or I forget to manually save. |Raihaan Sandhu|
+| 1  | Import Bank Statements | As a user, I want to import my bank statements in JSON format so that the app can automatically categorize my transactions. | Parsa Nabifar |
+| 2  | View Transaction | As a user, I want to view my list of organized transactions by month to review my particular monthly transactions. | Yunji Hwang |
+| 3  | Load Dashboard (Pie Chart) | As a user, I want to view a visual breakdown of my spending by category for a selected month so that I can understand my spending habits. | Kosar Hemmati |
+| 4 | Load Dashboard (Time Chart) | As a user, I want to view a monthly summary of my income and expenses over time so that I can identify my financial trends. | Kosar Hemmati |
+| 5 | Goal Trees| As a user, I want to set monthly spending goals by category and track my progress through interactive visualizations so that I can manage my budget more effectively. | Kerem Berk Bozkurt |
+| 6 | Autosaving | As a user, I want my transaction and goal data to be automatically saved periodically in the background so that I don't lose my work if the application crashes or I forget to manually save. | Raihaan Sandhu |
 
 
 ## API and Data Used
 
 API link:
 API Usage: Categorizing bank statements into categories
- Income, rent, transportation, Food & Dining, Transportation, Shopping, other
+ Income, Rent & Utilities, Transportation, Food & Dining, Shopping, Entertainment, Other
 Instructions:
 Instructions (Setting API key in env) 
  GEMINI_API_KEY=your_api_token
 
 ### Charts.io API
-API Link: 
-API Usage: Visualizing bank transactions data by category and bar charts to see cash flow/
+API Link: https://quickchart.io/chart?c=_{your chart here}_
+API Usage: Visualizing financial data by spending category (pie chart) and by inflow and outlow over time (time chart)
+Instructions: _KOSAR TO ADD_
 
 ### JSON data
 Transactions.json
