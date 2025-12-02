@@ -50,8 +50,8 @@ goal.json
 
 <img src="screenshots/dashboard.png" alt="dashboard.png image" style="width:50%;">
 
-<img src="screenshots/tree.png" alt="tree.png image" style="width:75%;">
+<img src="screenshots/tree.png" alt="tree.png image" style="width:50%;">
 
-<img src="screenshots/autosave.png" alt="autosave.png image" style="width:50%;">
+<img src="screenshots/autosave.png" alt="autosave.png image" style="width:25%;">
 
 <img src="screenshots/checkStyle.png" alt="checkStyle.png image" style="width:50%;">
